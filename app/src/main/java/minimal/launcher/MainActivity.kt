@@ -1,6 +1,5 @@
 package minimal.launcher
 
-import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LauncherTheme {
-                mainScreen()
+                MainScreen()
             }
         }
     }
@@ -46,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun mainScreen() {
+fun MainScreen() {
     
     // temp variable
     val apps = arrayOf<String>(
