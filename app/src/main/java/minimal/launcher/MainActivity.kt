@@ -1,10 +1,14 @@
 package minimal.launcher
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +36,9 @@ import androidx.compose.ui.unit.sp
 import minimal.launcher.ui.theme.LauncherTheme
 
 class MainActivity : ComponentActivity() {
+
+    private var isOpen : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,11 +52,11 @@ class MainActivity : ComponentActivity() {
 
 
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MainScreen() {
     
     // temp variable
+    val context = LocalContext.current
     val apps = arrayOf<String>(
         "Phone",
         "Whatsapp",
@@ -61,6 +70,27 @@ fun MainScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = {change, dragAmount ->
+                        // Essential
+                    },
+                    onDragEnd = {
+                        val activityOption = ActivityOptions.makeCustomAnimation(
+                            context,
+                            R.anim.slide_up,
+                            R.anim.stay_still
+                        )
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AppDrawer::class.java
+                                ),
+                                activityOption.toBundle()
+                            )
+                    }
+                )
+            }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

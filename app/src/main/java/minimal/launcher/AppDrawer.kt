@@ -1,7 +1,9 @@
 package minimal.launcher
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -24,18 +26,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import minimal.launcher.component.NestedLazyColumn
 import minimal.launcher.ui.theme.LauncherTheme
 
 class AppDrawer : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             LauncherTheme {
                 Scaffold() { innerPadding ->
-
+                    NestedLazyColumn(
+                        modifier = Modifier.padding(innerPadding),
+                        apps = mapOf(
+                            "A" to arrayOf(
+                                "apple",
+                                "amazon"
+                            )
+                        ),
+                    )
                 }
             }
         }
     }
+
 }
