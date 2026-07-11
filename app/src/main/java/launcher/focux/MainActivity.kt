@@ -1,5 +1,6 @@
 package launcher.focux
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,8 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import launcher.focux.ui.theme.FocuxTheme
@@ -44,6 +47,7 @@ fun MainScreen() {
         "Phone",
         "Gpay"
     )
+    val context = LocalContext.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
@@ -51,8 +55,15 @@ fun MainScreen() {
             .fillMaxSize()
             //.padding(top = 110.dp, bottom = 40.dp)
             .combinedClickable(
+                indication = null,
+                interactionSource = null,
                 onLongClick = {
-
+                    context.startActivity(
+                        Intent(
+                            context,
+                            SettingActivity::class.java
+                        )
+                    )
                 },
                 onClick = {}
             )
