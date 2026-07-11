@@ -19,11 +19,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import launcher.focux.AppModel
 import java.util.Locale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NestedLazyColumn(modifier: Modifier, apps: Map<String, Array<String>>) {
+fun NestedLazyColumn(modifier: Modifier, apps: MutableMap<String, MutableList<AppModel>>) {
 
     val context = LocalContext.current
 
@@ -47,7 +48,7 @@ fun NestedLazyColumn(modifier: Modifier, apps: Map<String, Array<String>>) {
                 items = listOfApps
             ){
                 Text(
-                    text = it.capitalize(Locale.getDefault()),
+                    text = it.name.capitalize(Locale.getDefault()),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier

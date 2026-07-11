@@ -61,7 +61,7 @@ fun MainScreen() {
                     context.startActivity(
                         Intent(
                             context,
-                            SettingActivity::class.java
+                            DrawerActivity::class.java
                         )
                     )
                 },
