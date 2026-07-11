@@ -28,6 +28,11 @@ class DrawerActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
