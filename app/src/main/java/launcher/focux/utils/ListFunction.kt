@@ -1,18 +1,13 @@
 package launcher.focux.utils
 
 import launcher.focux.AppModel
+import java.util.SortedMap
 
 
-fun List<AppModel>.sort() : MutableMap<String, MutableList<AppModel>> {
+fun List<AppModel>.sort() : SortedMap<String, List<AppModel>> {
     val sorted : MutableMap<String, MutableList<AppModel>> = mutableMapOf()
 
-    this.forEach {
-        if(sorted.containsKey(it.name[0].toString())) {
-            sorted[it.name[0].toString()]!!.add(it)
-        } else {
-            sorted.putIfAbsent(it.name[0].toString(), mutableListOf<AppModel>(it))
-        }
-    }
-
-    return sorted.toSortedMap()
+    return this.filter { it.name.isNotEmpty() }
+        .groupBy { it.name[0].uppercaseChar().toString() }
+        .toSortedMap()
 }

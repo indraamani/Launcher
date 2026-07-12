@@ -4,5 +4,5 @@ import android.content.Intent
 
 data class AppModel(
     val name: String,
-    val launcherIntent: Intent
+    val packageName: String
 )

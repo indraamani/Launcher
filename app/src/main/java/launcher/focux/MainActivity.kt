@@ -1,14 +1,23 @@
 package launcher.focux
 
+import android.R
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,23 +25,49 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastCbrt
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import launcher.focux.activity.DrawerActivity
+import launcher.focux.activity.SettingActivity
+import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
+import launcher.focux.viewmodel.MainViewmodel
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel : MainViewmodel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+        val insetController = WindowCompat
+            .getInsetsController(window, window.decorView)
+        insetController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        insetController.hide(WindowInsetsCompat.Type.statusBars())
+
+
         setContent {
             FocuxTheme {
-                MainScreen()
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                    MainScreen()
+                else
+                    HiddenScreen()
             }
         }
     }
@@ -47,11 +82,14 @@ fun MainScreen() {
         "Phone",
         "Gpay"
     )
+    var hasTriggered by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
+            .background(Color.Transparent)
             .fillMaxSize()
             //.padding(top = 110.dp, bottom = 40.dp)
             .combinedClickable(
@@ -67,6 +105,19 @@ fun MainScreen() {
                 },
                 onClick = {}
             )
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = {
+                        hasTriggered = false
+                    },
+                    onDrag = { change, dragAmount ->
+                        if (!hasTriggered && change.previousPosition.y > change.position.y && dragAmount.y < 0) {
+                            hasTriggered = true
+                            context.startActivity(Intent(context, DrawerActivity::class.java))
+                        }
+                    }
+                )
+            }
 
     ) {
         // Mock Widget

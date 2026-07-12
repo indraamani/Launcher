@@ -1,4 +1,4 @@
-package launcher.focux.component
+package launcher.focux.ui.component
 
 import android.app.Application
 import android.widget.Toast
@@ -22,10 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import launcher.focux.AppModel
 import java.util.Locale
+import java.util.SortedMap
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NestedLazyColumn(modifier: Modifier, apps: MutableMap<String, MutableList<AppModel>>) {
+fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>) {
 
     val context = LocalContext.current
 
@@ -46,7 +47,8 @@ fun NestedLazyColumn(modifier: Modifier, apps: MutableMap<String, MutableList<Ap
             }
 
             items(
-                items = listOfApps
+                items = listOfApps,
+                key = { app -> app.packageName}
             ){
                 Text(
                     text = it.name.capitalize(Locale.getDefault()),
@@ -60,7 +62,9 @@ fun NestedLazyColumn(modifier: Modifier, apps: MutableMap<String, MutableList<Ap
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
                             onClick = {
-                                context.startActivity(it.launcherIntent)
+                                context.startActivity(
+                                    context.packageManager.getLaunchIntentForPackage(it.packageName)
+                                )
 
                             },
                             onLongClick = {

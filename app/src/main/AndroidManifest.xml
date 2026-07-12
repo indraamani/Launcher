@@ -21,12 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Focux">
         <activity
-            android:name=".DrawerActivity"
+            android:name=".activity.DrawerActivity"
             android:exported="false"
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.Focux" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".activity.SettingActivity"
             android:exported="false"
             android:label="@string/title_activity_setting"
             android:theme="@style/Theme.Focux" />

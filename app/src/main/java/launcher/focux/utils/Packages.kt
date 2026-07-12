@@ -1,13 +1,12 @@
-package launcher.focux
+package launcher.focux.utils
 
-import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import launcher.focux.AppModel
 
-class Packages(val ctx: Context) {
-    val packageManager: PackageManager = ctx.packageManager
+class Packages(ctx: Context) {
+    private val packageManager: PackageManager = ctx.packageManager
 
     fun fetchAllPackages() : List<AppModel> {
         val apps : List<PackageInfo> = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
@@ -19,7 +18,7 @@ class Packages(val ctx: Context) {
                 appList.add(
                     AppModel(
                         name = name,
-                        launcherIntent = packageManager.getLaunchIntentForPackage(app.packageName)!!
+                        packageName = app.packageName
                     )
                 )
             }

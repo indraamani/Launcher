@@ -1,4 +1,4 @@
-package launcher.focux.component
+package launcher.focux.ui.component
 
 import android.widget.Checkable
 import androidx.compose.foundation.combinedClickable
