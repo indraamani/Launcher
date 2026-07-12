@@ -1,6 +1,6 @@
 package launcher.focux.ui.component
 
-import android.app.Application
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -65,7 +65,7 @@ fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>
                                 context.startActivity(
                                     context.packageManager.getLaunchIntentForPackage(it.packageName)
                                 )
-
+                                (context as Activity).finish()
                             },
                             onLongClick = {
                                 Toast.makeText(
