@@ -59,7 +59,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                if (available.y > 0) {
+                if (available.y > 10) {
                     (ctx as Activity).finish()
 //                    ctx.startActivity(
 //                        Intent(ctx, MainActivity::class.java)

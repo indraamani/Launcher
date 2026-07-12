@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import launcher.focux.R
 
 
@@ -28,19 +30,20 @@ import launcher.focux.R
 fun SettingButton(
     settingName: String,
     logo: Painter,
-    isCheckable: Boolean,
-    onCheckChange: () -> Unit,
-    onClick: () -> Unit
+    isCheckable: Boolean? = false,
+    onCheckChange: () -> Unit? = {},
+    onClick: () -> Unit? = {}
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(100.dp)
+            .padding(horizontal = 16.dp, vertical = 11.dp)
             .combinedClickable(
                 onClick= { onClick() }
             ),
-        shape = CardDefaults.elevatedShape
+        shape = RoundedCornerShape(26.dp),
+
     ) {
         Row (
             modifier = Modifier
@@ -54,12 +57,13 @@ fun SettingButton(
                 contentDescription = null
             )
             Text(
-                text = settingName
+                text = settingName,
+                fontSize = 16.sp,
             )
             Spacer(
                 modifier = Modifier.weight(1f)
             )
-            if (isCheckable) {
+            if (isCheckable == true) {
                 Switch(
                     modifier = Modifier
                         .scale(0.7f)
@@ -72,7 +76,8 @@ fun SettingButton(
             } else {
                 Icon(
                     modifier = Modifier
-                        .padding(16.dp),
+                        .padding(16.dp)
+                        .size(16.dp),
                     painter = painterResource(R.drawable.chevron_right),
                     contentDescription = null
                 )

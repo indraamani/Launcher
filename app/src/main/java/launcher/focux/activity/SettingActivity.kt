@@ -87,23 +87,123 @@ fun SettingScreen() {
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 10.dp),
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
                 text= "Customisations"
             )
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = false, onClick = { }, onCheckChange = { })
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = false, onClick = { }, onCheckChange = { })
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = true, onClick = { }, onCheckChange = { })
-
-
+            SettingButton(
+                "Choose Home Theme",
+                painterResource(R.drawable.lucide_palette),
+                onClick = { },
+            )
+            SettingButton(
+                "Choose Font",
+                painterResource(R.drawable.lucide_case_sensitive),
+                onClick = { },
+            )
+            SettingButton(
+                "Choose Top Widget",
+                painterResource(R.drawable.lucide_chart_no_axes_gantt),
+                onClick = { },
+            )
+            SettingButton(
+                "Choose Bottom Widget",
+                painterResource(R.drawable.lucide_list_end),
+                onClick = { },
+            )
+            SettingButton(
+                "Show Status Bar",
+                painterResource(R.drawable.alarm_clock),
+                isCheckable = true,
+                onCheckChange = { }
+            )
+            SettingButton(
+                "Enable Haptic Feedback",
+                painterResource(R.drawable.lucide_blend),
+                isCheckable = true,
+                onCheckChange = { }
+            )
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 10.dp, top = 10.dp),
-                text= "Customisations"
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                text= "Swipe App Launch Customisations"
             )
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = true, onClick = { }, onCheckChange = { })
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = true, onClick = { }, onCheckChange = { })
-            SettingButton("Change theme", painterResource(R.drawable.arrow), isCheckable = false, onClick = { }, onCheckChange = { })
+            SettingButton(
+                "Enable Swipe to Launch app",
+                painterResource(R.drawable.alarm_clock),
+                isCheckable = true,
+                onCheckChange = { }
+            )
+            SettingButton(
+                "Enable Swipe Up To Open Search",
+                painterResource(R.drawable.alarm_clock),
+                isCheckable = true,
+                onCheckChange = { }
+            )
+            SettingButton(
+                "Choose Swipe Launch Apps",
+                painterResource(R.drawable.activity),
+                onClick = {
+
+                }
+            )
+            Text(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                text= "Swipe App Launch Customisations"
+            )
+            SettingButton(
+                "Show Clock on Home",
+                painterResource(R.drawable.alarm_clock),
+                isCheckable = true,
+                onCheckChange = { }
+            )
+            SettingButton(
+                "12 Hr Format",
+                painterResource(R.drawable.lucide_alarm_clock_off),
+                isCheckable = true,
+                onCheckChange = { }
+            )
+            Text(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                text= "Hidden Apps"
+            )
+            SettingButton(
+                "Modify Hidden Apps",
+                painterResource(R.drawable.lucide_ban),
+                onClick = {
+
+                }
+            )
+            Text(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                text= "Renamed Apps"
+            )
+            SettingButton(
+                "Modify/View Renamed Apps",
+                painterResource(R.drawable.lucide_route),
+                onClick = {
+
+                }
+            )
+            Text(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                text= "Pinned Apps Customization"
+            )
+            SettingButton(
+                "Modifed Pinned Apps",
+                painterResource(R.drawable.lucide_grid),
+                onClick = {
+
+                }
+            )
         }
     }
 }
