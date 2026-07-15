@@ -15,19 +15,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import launcher.focux.AppModel
+import launcher.focux.datastore.pinnedapp.PinnedApp
+import launcher.focux.datastore.pinnedapp.PinnedAppRepo
 import java.util.Locale
 import java.util.SortedMap
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>) {
-
+    // remove
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     LazyColumn(
@@ -68,11 +75,14 @@ fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>
                                 (context as Activity).finish()
                             },
                             onLongClick = {
-                                Toast.makeText(
-                                    context,
-                                    "App Long clicked",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                coroutineScope.launch {
+                                    PinnedAppRepo(context).add(
+                                        PinnedApp(
+                                            it.name,
+                                            it.packageName
+                                        )
+                                    )
+                                }
                             }
                         )
                 )

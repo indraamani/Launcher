@@ -59,7 +59,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                if (available.y > 10) {
+                if (available.y > 100) {
                     (ctx as Activity).finish()
 //                    ctx.startActivity(
 //                        Intent(ctx, MainActivity::class.java)
@@ -86,7 +86,8 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         }
     ) { innerPadding ->
         NestedLazyColumn(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding),
             apps = viewmodel.packages.collectAsStateWithLifecycle().value,
         )
     }

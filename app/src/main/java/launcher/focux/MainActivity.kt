@@ -42,6 +42,7 @@ import androidx.compose.ui.util.fastCbrt
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.ui.component.HiddenScreen
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FocuxTheme {
                 if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-                    MainScreen()
+                    MainScreen(viewModel)
                 else
                     HiddenScreen()
             }
@@ -73,15 +74,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun MainScreen() {
-    val pinnedAppList: List<String> = listOf(
-        "Instagram",
-        "Whatsapp",
-        "Phone",
-        "Gpay"
-    )
+fun MainScreen(viewmodel: MainViewmodel) {
+    val pinnedAppList by viewmodel.pinnedApp.collectAsStateWithLifecycle()
+    val ctx = LocalContext.current
     var hasTriggered by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -111,7 +108,7 @@ fun MainScreen() {
                         hasTriggered = false
                     },
                     onDrag = { change, dragAmount ->
-                        if (!hasTriggered && change.previousPosition.y > change.position.y && dragAmount.y < 0) {
+                        if (!hasTriggered && change.previousPosition.y > change.position.y && dragAmount.y < 4) {
                             hasTriggered = true
                             context.startActivity(Intent(context, DrawerActivity::class.java))
                         }
@@ -134,12 +131,21 @@ fun MainScreen() {
         ) {
             items(pinnedAppList) {
                 Text(
-                    text = it,
+                    text = it.name,
                     textAlign = TextAlign.Center,
                     fontSize = 18.sp,
                     modifier = Modifier
                         .width(120.dp)
                         .padding(0.dp, 6.dp)
+                        .combinedClickable(
+                            interactionSource = null,
+                            indication = null,
+                            onClick = {
+                                ctx.startActivity(
+                                        ctx.packageManager.getLaunchIntentForPackage(it.packageName)
+                                )
+                            }
+                        )
                 )
             }
         }
@@ -147,7 +153,9 @@ fun MainScreen() {
 
         Text(
             text = "03 : 39",
-            modifier = Modifier.padding(bottom = 40.dp)
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .background(Color(255f, 255f, 255f, 0.5f))
         )
 
     }
