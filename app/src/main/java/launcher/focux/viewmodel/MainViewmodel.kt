@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
+import launcher.focux.datastore.userpreference.PreferenceRepo
+import launcher.focux.datastore.userpreference.PreferencesModel
 
 class MainViewmodel(application: Application) : AndroidViewModel(application) {
 
@@ -21,5 +23,9 @@ class MainViewmodel(application: Application) : AndroidViewModel(application) {
         initialValue = emptyList<PinnedApp>()
     )
 
-
+    val setting: StateFlow<PreferencesModel> = PreferenceRepo(application).setting.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = PreferencesModel()
+    )
 }

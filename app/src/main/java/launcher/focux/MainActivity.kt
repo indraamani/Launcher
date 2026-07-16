@@ -39,6 +39,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,9 +54,11 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
+import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.MainViewmodel
+import androidx.compose.runtime.collectAsState
 
 class MainActivity : ComponentActivity() {
 
@@ -144,11 +149,14 @@ fun MainScreen(viewmodel: MainViewmodel) {
             items(pinnedAppList) {
                 Text(
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                    //overflow = TextOverflow.Ellipsis,
                     text = it.name,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font( viewmodel.setting.collectAsState().value.font)
+                    ),
                     modifier = Modifier
                         .width(120.dp)
                         .padding(0.dp, 7.dp)
