@@ -18,9 +18,14 @@ class PinnedAppRepo(
 
     suspend fun add(app: PinnedApp) {
         context.pinnedAppModelDatastore.updateData { current ->
-            current.copy(
-                appList = (current.appList + app)
-            )
+            if (current.appList.size >= 6) {
+                val updatedList = current.appList.toMutableList().apply {
+                    set(5, app)
+                }
+                current.copy(appList = updatedList)
+            } else {
+                current.copy(appList = (current.appList + app))
+            }
         }
     }
 

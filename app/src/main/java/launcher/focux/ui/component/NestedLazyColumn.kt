@@ -61,6 +61,7 @@ fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>
                     text = it.name.capitalize(Locale.getDefault()),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 8.dp)
