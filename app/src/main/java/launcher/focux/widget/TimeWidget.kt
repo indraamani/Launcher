@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.collectLatest
+import launcher.focux.R
 import launcher.focux.datastore.userpreference.preferenceDatastore
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -66,7 +67,7 @@ fun BoxedClock() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun Clock(ctx: Context) {
     val dateTime = LocalDateTime.now()
@@ -112,4 +113,38 @@ fun Clock(ctx: Context) {
                 .padding(8.dp)
         )
     }
+}
+
+@Composable
+fun DayWidget(ctx: Context) {
+    val dateTime = LocalDateTime.now()
+    val day = DateTimeFormatter.ofPattern("EEEE")
+    
+    Text(
+        text = dateTime.format(day),
+        fontSize = 30.sp,
+        color = Color.Green,
+        letterSpacing = 1.sp,
+        fontFamily = FontFamily(
+            Font(ctx.preferenceDatastore.data.collectAsState(initial = null).value!!.font)
+        ),
+    )
+}
+
+@Composable
+fun DateWidget(ctx: Context) {
+    val dateTime = LocalDateTime.now()
+    val formate = DateTimeFormatter.ofPattern("EEE MMMM dd")
+
+    Text(
+        text = dateTime.format(formate),
+        fontSize = 30.sp,
+        color = Color.Green,
+        letterSpacing = 1.sp,
+        fontFamily = FontFamily(
+            Font(ctx.preferenceDatastore.data.collectAsState(initial = null).value!!.font)
+        ),
+    )
+
+
 }
