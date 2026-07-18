@@ -14,16 +14,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import launcher.focux.ui.component.NestedLazyColumn
-import launcher.focux.ui.theme.FocuxTheme
-import launcher.focux.viewmodel.DrawerViewmodel
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import launcher.focux.ui.component.NestedLazyColumn
+import launcher.focux.ui.theme.FocuxTheme
+import launcher.focux.viewmodel.DrawerViewmodel
 
 class DrawerActivity : ComponentActivity() {
 

@@ -45,10 +45,10 @@ fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>
         apps.forEach { (word, listOfApps) ->
             item {
                 Text(
-                    fontSize = 22.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
-                        .padding(top = 2.dp, bottom = 2.dp, start = 12.dp),
+                        .padding(top = 2.dp, bottom = 2.dp, start = 24.dp),
                     text = word
                 )
             }

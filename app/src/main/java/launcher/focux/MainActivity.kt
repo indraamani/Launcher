@@ -1,5 +1,6 @@
 package launcher.focux
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -18,11 +19,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +49,7 @@ import launcher.focux.activity.SettingActivity
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.MainViewmodel
-import androidx.compose.runtime.collectAsState
-import launcher.focux.widget.BoxedClock
-import launcher.focux.widget.Clock
 import launcher.focux.widget.DateWidget
-import launcher.focux.widget.DayWidget
 
 class MainActivity : ComponentActivity() {
 
@@ -126,7 +125,6 @@ fun MainScreen(viewmodel: MainViewmodel) {
             }
 
     ) {
-        // Mock Widget
         Box(
             modifier = Modifier
                 .padding(top = 126.dp)
@@ -136,37 +134,38 @@ fun MainScreen(viewmodel: MainViewmodel) {
 
         Spacer(modifier = Modifier.weight(0.8f))
         LazyColumn(
-            modifier = Modifier,
+            modifier = Modifier
+                .wrapContentWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(pinnedAppList) {
                 Text(
-                    maxLines = 1,
-                    //overflow = TextOverflow.Ellipsis,
-                    text = it.name,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 24.sp,
-//                    fontFamily = FontFamily(
-//                        Font( viewmodel.setting.collectAsState().value.font)
-//                    ),
                     modifier = Modifier
-                        .width(120.dp)
+                        .wrapContentWidth()
                         .padding(0.dp, 7.dp)
                         .combinedClickable(
                             interactionSource = null,
                             indication = null,
                             onClick = {
                                 ctx.startActivity(
-                                        ctx.packageManager.getLaunchIntentForPackage(it.packageName)
+                                    ctx.packageManager.getLaunchIntentForPackage(it.packageName)
                                 )
                             }
-                        )
+                        ),
+                    maxLines = 1,
+                    //overflow = TextOverflow.Ellipsis,
+                    text = it.name,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font( viewmodel.setting.collectAsState().value.font)
+                    )
                 )
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-
         Text(
             text = "03 : 39",
             modifier = Modifier
