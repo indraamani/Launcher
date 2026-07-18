@@ -1,17 +1,10 @@
 package launcher.focux
 
-import android.R
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowInsetsController
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -19,9 +12,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -41,24 +34,23 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastCbrt
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
-import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.MainViewmodel
 import androidx.compose.runtime.collectAsState
+import launcher.focux.widget.BoxedClock
+import launcher.focux.widget.Clock
+import launcher.focux.widget.DateWidget
+import launcher.focux.widget.DayWidget
 
 class MainActivity : ComponentActivity() {
 
@@ -135,11 +127,12 @@ fun MainScreen(viewmodel: MainViewmodel) {
 
     ) {
         // Mock Widget
-        Text(
-            text = "03 : 39",
-            fontSize = 32.sp,
-            modifier = Modifier.padding(top = 110.dp)
-        )
+        Box(
+            modifier = Modifier
+                .padding(top = 126.dp)
+        ) {
+            DateWidget(ctx)
+        }
 
         Spacer(modifier = Modifier.weight(0.8f))
         LazyColumn(
@@ -154,9 +147,9 @@ fun MainScreen(viewmodel: MainViewmodel) {
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 24.sp,
-                    fontFamily = FontFamily(
-                        Font( viewmodel.setting.collectAsState().value.font)
-                    ),
+//                    fontFamily = FontFamily(
+//                        Font( viewmodel.setting.collectAsState().value.font)
+//                    ),
                     modifier = Modifier
                         .width(120.dp)
                         .padding(0.dp, 7.dp)
