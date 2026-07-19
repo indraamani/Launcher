@@ -50,8 +50,16 @@ import launcher.focux.datastore.app.applicationDatastore
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.ui.widget.BatteryWidget
+import launcher.focux.ui.widget.BoxedClock
+import launcher.focux.ui.widget.Clock
+import launcher.focux.ui.widget.DateClockWidget
 import launcher.focux.viewmodel.MainViewmodel
 import launcher.focux.ui.widget.DateWidget
+import launcher.focux.ui.widget.DayClockWidget
+import launcher.focux.ui.widget.DayWidget
+import launcher.focux.ui.widget.HourGrid
+import launcher.focux.ui.widget.MonthGrid
+import launcher.focux.ui.widget.YearGrid
 
 class MainActivity : ComponentActivity() {
 
@@ -76,14 +84,10 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-//            this@MainActivity.applicationDatastore.data.collect {
-//                if(it.allPackages.isEmpty()) {
-                    viewModel.packages.collect {
-                        ApplicationRepo(this@MainActivity)
-                            .update(it)
-                    }
-//                }
-//            }
+            viewModel.packages.collect {
+                ApplicationRepo(this@MainActivity)
+                    .update(it)
+            }
         }
 
         onBackPressedDispatcher.addCallback(this@MainActivity, OnBackPressed)
@@ -109,7 +113,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
-            //.padding(top = 110.dp, bottom = 40.dp)
+//            .padding(top = 110.dp, bottom = 40.dp)
             .combinedClickable(
                 indication = null,
                 interactionSource = null,
@@ -142,7 +146,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
             modifier = Modifier
                 .padding(top = 126.dp)
         ) {
-            DateWidget(ctx)
+            BoxedClock(viewmodel.setting.collectAsState().value.font)
         }
 
         Spacer(modifier = Modifier.weight(0.8f))
@@ -154,6 +158,14 @@ fun MainScreen(viewmodel: MainViewmodel) {
         ) {
             items(pinnedAppList) {
                 Text(
+                    maxLines = 1,
+                    text = it.name,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(
+                        Font( viewmodel.setting.collectAsState().value.font)
+                    ),
                     modifier = Modifier
                         .wrapContentWidth()
                         .padding(0.dp, 7.dp)
@@ -166,15 +178,6 @@ fun MainScreen(viewmodel: MainViewmodel) {
                                 )
                             }
                         ),
-                    maxLines = 1,
-                    //overflow = TextOverflow.Ellipsis,
-                    text = it.name,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 24.sp,
-                    fontFamily = FontFamily(
-                        Font( viewmodel.setting.collectAsState().value.font)
-                    )
                 )
             }
         }

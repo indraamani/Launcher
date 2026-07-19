@@ -8,20 +8,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
 
-object PreferenceSerializer : Serializer<PreferencesModel> {
-    override val defaultValue: PreferencesModel = PreferencesModel()
+object PreferenceSerializer : Serializer<PreferenceModel> {
+    override val defaultValue: PreferenceModel = PreferenceModel()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override suspend fun readFrom(input: InputStream): PreferencesModel {
+    override suspend fun readFrom(input: InputStream): PreferenceModel {
         return try {
             Json.decodeFromString(
-                deserializer = PreferencesModel.serializer(),
+                deserializer = PreferenceModel.serializer(),
                 string = input.readAllBytes().toString()
             )
         } catch (exception : IOException) {
@@ -30,17 +29,17 @@ object PreferenceSerializer : Serializer<PreferencesModel> {
     }
 
     override suspend fun writeTo(
-        t: PreferencesModel,
+        t: PreferenceModel,
         output: OutputStream
     ) {
         Json.encodeToString(
-            serializer = PreferencesModel.serializer(),
+            serializer = PreferenceModel.serializer(),
             value = t
         ).toByteArray()
     }
 }
 
-val Context.preferenceDatastore : DataStore<PreferencesModel> by dataStore(
+val Context.preferenceDatastore : DataStore<PreferenceModel> by dataStore(
     fileName = "settings.json",
     serializer = PreferenceSerializer
 )

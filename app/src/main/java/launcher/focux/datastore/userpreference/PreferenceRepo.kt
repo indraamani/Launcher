@@ -1,7 +1,6 @@
 package launcher.focux.datastore.userpreference
 
 import android.content.Context
-import androidx.compose.runtime.currentComposer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import launcher.focux.utils.BottomWidget
@@ -11,7 +10,7 @@ class PreferenceRepo(
     private val ctx: Context
 ) {
 
-    val setting : Flow<PreferencesModel> = ctx.preferenceDatastore.data
+    val setting : Flow<PreferenceModel> = ctx.preferenceDatastore.data
         .catch { exception ->
             throw exception
         }

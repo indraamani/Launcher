@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,15 +25,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import launcher.focux.datastore.app.applicationDatastore
 import java.time.LocalDateTime
 import java.time.Year
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun BoxedClock() {
+fun BoxedClock(font: Int) {
     val dateTime = LocalDateTime.now()
     val hour = DateTimeFormatter.ofPattern("HH")
     val minute = DateTimeFormatter.ofPattern("mm")
@@ -41,6 +48,9 @@ fun BoxedClock() {
         Text(
             fontSize = 44.sp,
             text = dateTime.format(hour),
+            fontFamily = FontFamily(
+                Font(font)
+            ),
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(12.dp)
@@ -61,6 +71,9 @@ fun BoxedClock() {
         Text(
             fontSize = 44.sp,
             text = dateTime.format(minute),
+            fontFamily = FontFamily(
+                Font(font)
+            ),
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(12.dp)
@@ -74,169 +87,232 @@ fun BoxedClock() {
 }
 
 @Composable
-fun Clock(ctx: Context) {
+fun Clock(font: Int) {
     val dateTime = LocalDateTime.now()
     val hour = DateTimeFormatter.ofPattern("HH")
     val minute = DateTimeFormatter.ofPattern("mm")
 
     Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            fontSize = 44.sp,
+            fontSize = 34.sp,
             text = dateTime.format(hour),
             color = MaterialTheme.colorScheme.primary,
+            fontFamily = FontFamily(
+                Font(font)
+            ),
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(6.dp)
                 )
-                .padding(8.dp)
         )
-        Box (
-            modifier = Modifier
-                .clip(
-                    RoundedCornerShape(2.dp)
-                )
-                .size(6.dp)
-                .background(Color.LightGray)
-        )
+        Column {
+            Box (
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(4.dp)
+                    )
+                    .size(4.dp)
+                    .background(Color.LightGray)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Box (
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(4.dp)
+                    )
+                    .size(4.dp)
+                    .background(Color.LightGray)
+            )
+        }
         Text(
-            fontSize = 44.sp,
+            fontSize = 34.sp,
             text = dateTime.format(minute),
             color = Color.White,
+            fontFamily = FontFamily(
+                Font(font)
+            ),
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(6.dp)
                 )
-                .padding(8.dp)
         )
     }
 }
 
 @Composable
-fun DayWidget(ctx: Context) {
+fun DayWidget(font: Int) {
     val dateTime = LocalDateTime.now()
     val day = DateTimeFormatter.ofPattern("EEEE")
 
     Text(
         text = dateTime.format(day),
-        fontSize = 32.sp,
+        fontSize = 20.sp,
         color = MaterialTheme.colorScheme.primary,
         letterSpacing = 1.sp,
+        fontFamily = FontFamily(
+            Font(font)
+        )
     )
 }
 
 @Composable
-fun DateWidget(ctx: Context) {
+fun DateWidget(font: Int) {
     val dateTime = LocalDateTime.now()
     val formate = DateTimeFormatter.ofPattern("EEE MMMM dd")
 
     Text(
         text = dateTime.format(formate),
-        fontSize = 32.sp,
+        fontSize = 16.sp,
         color = MaterialTheme.colorScheme.primary,
         letterSpacing = 1.sp,
+        fontFamily = FontFamily(
+            Font(font)
+        )
     )
 }
 
 @Composable
-fun DayClockWidget() {
+fun DayClockWidget(font: Int) {
     val dateTime = LocalDateTime.now()
     val hour = DateTimeFormatter.ofPattern("HH")
     val minute = DateTimeFormatter.ofPattern("mm")
     val day = DateTimeFormatter.ofPattern("EEEE")
 
     Column(
-
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = dateTime.format(day),
-            fontSize = 32.sp,
+            fontSize = 16.sp,
             color = MaterialTheme.colorScheme.primary,
             letterSpacing = 1.sp,
+            fontFamily = FontFamily(
+                Font(font)
+            ),
+            modifier = Modifier
+                .padding(bottom = 4.dp)
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                fontSize = 44.sp,
+                fontSize = 34.sp,
                 text = dateTime.format(hour),
                 color = MaterialTheme.colorScheme.primary,
+                fontFamily = FontFamily(
+                    Font(font)
+                ),
                 modifier = Modifier
                     .clip(
                         RoundedCornerShape(6.dp)
                     )
-                    .padding(8.dp)
             )
-            Box (
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(2.dp)
-                    )
-                    .size(6.dp)
-                    .background(Color.LightGray)
-            )
+            Column {
+                Box (
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(4.dp)
+                        )
+                        .size(4.dp)
+                        .background(Color.LightGray)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Box (
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(4.dp)
+                        )
+                        .size(4.dp)
+                        .background(Color.LightGray)
+                )
+            }
             Text(
-                fontSize = 44.sp,
+                fontSize = 34.sp,
                 text = dateTime.format(minute),
                 color = Color.White,
+                fontFamily = FontFamily(
+                    Font(font)
+                ),
                 modifier = Modifier
                     .clip(
                         RoundedCornerShape(6.dp)
                     )
-                    .padding(8.dp)
             )
         }
     }
 }
 
 @Composable
-fun DateClockWidget() {
+fun DateClockWidget(font: Int) {
     val dateTime = LocalDateTime.now()
     val hour = DateTimeFormatter.ofPattern("HH")
     val minute = DateTimeFormatter.ofPattern("mm")
     val formate = DateTimeFormatter.ofPattern("EEE MMMM dd")
 
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = dateTime.format(formate),
-            fontSize = 32.sp,
+            fontSize = 16.sp,
             color = MaterialTheme.colorScheme.primary,
             letterSpacing = 1.sp,
+            fontFamily = FontFamily(
+                Font(font)
+            ),
+            modifier = Modifier
+                .padding(bottom = 4.dp)
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                fontSize = 44.sp,
+                fontSize = 34.sp,
                 text = dateTime.format(hour),
                 color = MaterialTheme.colorScheme.primary,
+                fontFamily = FontFamily(
+                    Font(font)
+                ),
                 modifier = Modifier
                     .clip(
                         RoundedCornerShape(6.dp)
                     )
-                    .padding(8.dp)
             )
-            Box (
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(2.dp)
-                    )
-                    .size(6.dp)
-                    .background(Color.LightGray)
-            )
+            Column {
+                Box (
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(4.dp)
+                        )
+                        .size(4.dp)
+                        .background(Color.LightGray)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Box (
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(4.dp)
+                        )
+                        .size(4.dp)
+                        .background(Color.LightGray)
+                )
+            }
             Text(
-                fontSize = 44.sp,
+                fontSize = 34.sp,
                 text = dateTime.format(minute),
                 color = Color.White,
+                fontFamily = FontFamily(
+                    Font(font)
+                ),
                 modifier = Modifier
                     .clip(
                         RoundedCornerShape(6.dp)
                     )
-                    .padding(8.dp)
             )
         }
     }
@@ -248,7 +324,7 @@ fun HourGrid() {
 
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxWidth(0.5f),
+            .fillMaxWidth(0.4f),
         columns = GridCells.Fixed(12),
     ) {
         items(
@@ -281,7 +357,7 @@ fun MonthGrid() {
 
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxWidth(0.5f),
+            .fillMaxWidth(0.4f),
         columns = GridCells.Fixed(12),
     ) {
         items(
@@ -324,7 +400,7 @@ fun YearGrid() {
 
     LazyVerticalGrid(
         modifier = Modifier
-            .fillMaxWidth(0.5f),
+            .fillMaxWidth(0.3f),
         columns = GridCells.Fixed(12),
     ) {
         items(
@@ -333,7 +409,7 @@ fun YearGrid() {
             Box (
                 modifier = Modifier
                     .aspectRatio(1f)
-                    .padding(4.dp)
+                    .padding(2.dp)
                     .clip(
                         RoundedCornerShape(24.dp)
                     )

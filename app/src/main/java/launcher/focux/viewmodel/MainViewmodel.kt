@@ -1,9 +1,7 @@
 package launcher.focux.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +15,10 @@ import launcher.focux.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
 import launcher.focux.datastore.userpreference.PreferenceRepo
-import launcher.focux.datastore.userpreference.PreferencesModel
+import launcher.focux.datastore.userpreference.PreferenceModel
 import launcher.focux.utils.Packages
 import launcher.focux.utils.sort
 import java.util.Collections.emptySortedMap
-import java.util.SortedMap
 
 class MainViewmodel(application: Application) : AndroidViewModel(application) {
 
@@ -33,10 +30,10 @@ class MainViewmodel(application: Application) : AndroidViewModel(application) {
         initialValue = emptyList<PinnedApp>()
     )
 
-    val setting: StateFlow<PreferencesModel> = PreferenceRepo(application).setting.stateIn(
+    val setting: StateFlow<PreferenceModel> = PreferenceRepo(application).setting.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = PreferencesModel()
+        initialValue = PreferenceModel()
     )
 
     private var _packages = MutableStateFlow<Map<String, List<AppModel>>>(emptySortedMap<String, List<AppModel>>())

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import launcher.focux.R
 import launcher.focux.ui.component.SettingButton
+import launcher.focux.ui.screens.FontScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.SettingViewmodel
 

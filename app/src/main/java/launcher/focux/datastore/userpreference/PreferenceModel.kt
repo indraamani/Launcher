@@ -6,7 +6,7 @@ import launcher.focux.utils.BottomWidget
 import launcher.focux.utils.TopWidget
 
 @Serializable
-data class PreferencesModel(
+data class PreferenceModel(
     var showStatusBar: Boolean = true,
     val showClock: Boolean = true,
     val clockFormat: Boolean = false, /* false = 24 hours format, true = 12 hours format */
