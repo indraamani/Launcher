@@ -32,7 +32,7 @@ import java.util.SortedMap
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NestedLazyColumn(modifier: Modifier, apps: SortedMap<String, List<AppModel>>) {
+fun NestedLazyColumn(modifier: Modifier, apps: Map<String, List<AppModel>>) {
     // remove
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current

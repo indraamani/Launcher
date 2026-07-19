@@ -4,7 +4,7 @@ import launcher.focux.AppModel
 import java.util.SortedMap
 
 
-fun List<AppModel>.sort() : SortedMap<String, List<AppModel>> {
+fun List<AppModel>.sort() : Map<String, List<AppModel>> {
     val sorted : MutableMap<String, MutableList<AppModel>> = mutableMapOf()
 
     return this.filter { it.name.isNotEmpty() }

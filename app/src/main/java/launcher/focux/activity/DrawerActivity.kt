@@ -21,12 +21,15 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collect
+import launcher.focux.AppModel
+import launcher.focux.datastore.app.InstalledPackage
 import launcher.focux.ui.component.NestedLazyColumn
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.DrawerViewmodel
+import java.util.SortedMap
 
 class DrawerActivity : ComponentActivity() {
-
     private val viewModel : DrawerViewmodel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,8 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
             }
         }
     }
+    val listt = viewmodel.packages.collectAsStateWithLifecycle(InstalledPackage(allPackages = emptyMap()))
+
 
     Scaffold(
         modifier = Modifier
@@ -76,7 +81,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         NestedLazyColumn(
             modifier = Modifier
                 .padding(innerPadding),
-            apps = viewmodel.packages.collectAsStateWithLifecycle().value,
+            apps = listt.value?.allPackages!!
         )
     }
 }

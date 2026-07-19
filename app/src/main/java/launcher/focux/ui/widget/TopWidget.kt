@@ -1,4 +1,4 @@
-package launcher.focux.widget
+package launcher.focux.ui.widget
 
 import android.content.Context
 import androidx.compose.foundation.background

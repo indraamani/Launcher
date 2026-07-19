@@ -1,6 +1,5 @@
 package launcher.focux
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
@@ -44,12 +41,17 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
+import launcher.focux.datastore.app.ApplicationRepo
+import launcher.focux.datastore.app.applicationDatastore
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
+import launcher.focux.ui.widget.BatteryWidget
 import launcher.focux.viewmodel.MainViewmodel
-import launcher.focux.widget.DateWidget
+import launcher.focux.ui.widget.DateWidget
 
 class MainActivity : ComponentActivity() {
 
@@ -71,6 +73,17 @@ class MainActivity : ComponentActivity() {
                 else
                     HiddenScreen()
             }
+        }
+
+        lifecycleScope.launch {
+//            this@MainActivity.applicationDatastore.data.collect {
+//                if(it.allPackages.isEmpty()) {
+                    viewModel.packages.collect {
+                        ApplicationRepo(this@MainActivity)
+                            .update(it)
+                    }
+//                }
+//            }
         }
 
         onBackPressedDispatcher.addCallback(this@MainActivity, OnBackPressed)
@@ -166,13 +179,12 @@ fun MainScreen(viewmodel: MainViewmodel) {
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "03 : 39",
+        Box(
             modifier = Modifier
                 .padding(bottom = 40.dp)
-
-                .background(Color(255f, 255f, 255f, 0.5f))
-        )
+        ) {
+            BatteryWidget(context)
+        }
 
     }
 }
