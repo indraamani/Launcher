@@ -1,4 +1,4 @@
-package launcher.focux.ui.widget
+package launcher.focux.ui.component.widget
 
 import android.app.ApplicationErrorReport
 import android.content.Context

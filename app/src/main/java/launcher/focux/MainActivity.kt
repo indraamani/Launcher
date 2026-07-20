@@ -46,20 +46,18 @@ import kotlinx.coroutines.launch
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.datastore.app.ApplicationRepo
-import launcher.focux.datastore.app.applicationDatastore
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
-import launcher.focux.ui.widget.BatteryWidget
-import launcher.focux.ui.widget.BoxedClock
-import launcher.focux.ui.widget.Clock
-import launcher.focux.ui.widget.DateClockWidget
+import launcher.focux.ui.component.widget.BatteryWidget
+import launcher.focux.ui.component.widget.BoxedClock
+import launcher.focux.ui.component.widget.Clock
+import launcher.focux.ui.component.widget.DateWidget
+import launcher.focux.ui.component.widget.DayClockWidget
+import launcher.focux.ui.component.widget.DayWidget
+import launcher.focux.ui.component.widget.MonthGrid
+import launcher.focux.ui.component.widget.YearGrid
+import launcher.focux.utils.TopWidget.*
 import launcher.focux.viewmodel.MainViewmodel
-import launcher.focux.ui.widget.DateWidget
-import launcher.focux.ui.widget.DayClockWidget
-import launcher.focux.ui.widget.DayWidget
-import launcher.focux.ui.widget.HourGrid
-import launcher.focux.ui.widget.MonthGrid
-import launcher.focux.ui.widget.YearGrid
 
 class MainActivity : ComponentActivity() {
 
@@ -103,10 +101,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(viewmodel: MainViewmodel) {
     val pinnedAppList by viewmodel.pinnedApp.collectAsStateWithLifecycle()
-    val ctx = LocalContext.current
-    var hasTriggered by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
+    var hasTriggered by remember { mutableStateOf(false) }
+    val topWidget = viewmodel.setting.collectAsStateWithLifecycle().value.topWidget
+    val font = viewmodel.setting.collectAsStateWithLifecycle().value.font
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
@@ -146,7 +145,38 @@ fun MainScreen(viewmodel: MainViewmodel) {
             modifier = Modifier
                 .padding(top = 126.dp)
         ) {
-            BoxedClock(viewmodel.setting.collectAsState().value.font)
+            when(topWidget) {
+                DEFAULT -> {
+
+                }
+                BOXED_CLOCK -> {
+                    BoxedClock(font)
+                }
+                CLOCK -> {
+                    Clock(font)
+                }
+                DAY -> {
+                    DayWidget(font)
+                }
+                DATE -> {
+                    DateWidget(font)
+                }
+                DAYCLOCK -> {
+                    DayClockWidget(font)
+                }
+                DATECLOCK -> {
+                    DateWidget(font)
+                }
+                HOURGRID -> {
+                    HOURGRID
+                }
+                MONTHGRID -> {
+                    MonthGrid()
+                }
+                YEARGRID -> {
+                    YearGrid()
+                }
+            }
         }
 
         Spacer(modifier = Modifier.weight(0.8f))
@@ -173,8 +203,8 @@ fun MainScreen(viewmodel: MainViewmodel) {
                             interactionSource = null,
                             indication = null,
                             onClick = {
-                                ctx.startActivity(
-                                    ctx.packageManager.getLaunchIntentForPackage(it.packageName)
+                                context.startActivity(
+                                    context.packageManager.getLaunchIntentForPackage(it.packageName)
                                 )
                             }
                         ),

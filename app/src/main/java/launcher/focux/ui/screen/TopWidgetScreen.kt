@@ -1,6 +1,7 @@
 package launcher.focux.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,30 +18,67 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import launcher.focux.R
-import launcher.focux.ui.widget.BoxedClock
-import launcher.focux.ui.widget.Clock
-import launcher.focux.ui.widget.DateClockWidget
-import launcher.focux.ui.widget.DateWidget
-import launcher.focux.ui.widget.DayClockWidget
-import launcher.focux.ui.widget.DayWidget
-import launcher.focux.ui.widget.HourGrid
-import launcher.focux.ui.widget.MonthGrid
-import launcher.focux.ui.widget.YearGrid
+import launcher.focux.datastore.userpreference.PreferenceRepo
+import launcher.focux.ui.component.widget.BoxedClock
+import launcher.focux.ui.component.widget.Clock
+import launcher.focux.ui.component.widget.DateClockWidget
+import launcher.focux.ui.component.widget.DateWidget
+import launcher.focux.ui.component.widget.DayClockWidget
+import launcher.focux.ui.component.widget.DayWidget
+import launcher.focux.ui.component.widget.HourGrid
+import launcher.focux.ui.component.widget.MonthGrid
+import launcher.focux.ui.component.widget.YearGrid
+import launcher.focux.utils.TopWidget
 
+@Composable
+fun Container(
+    onclick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+            .padding(vertical = 20.dp)
+            .clip(
+                RoundedCornerShape(120.dp)
+            )
+            .background(Color(255f, 255f, 255f, 0.5f))
+            .combinedClickable(
+                enabled = true,
+                indication = null,
+                interactionSource = null,
+                onClick = {
+                     onclick()
+                }
+            )
+    ) {
+        content()
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopWidgetScreen(
     closeScreen: () -> Unit
 ) {
+    val ctx = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,154 +113,91 @@ fun TopWidgetScreen(
                 contentPadding = PaddingValues(horizontal = 20.dp)
             ) {
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.BOXED_CLOCK)
+                        }
+                    }) {
                         BoxedClock(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.CLOCK)
+                        }
+                    }) {
                         Clock(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.DAY)
+                        }
+                    }) {
                         DayWidget(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.DATE)
+                        }
+                    }) {
                         DateWidget(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.DAYCLOCK)
+                        }
+                    }) {
                         DayClockWidget(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.DATECLOCK)
+                        }
+                    }) {
                         DateClockWidget(R.font.valorant)
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.HOURGRID)
+                        }
+                    }) {
                         HourGrid()
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.MONTHGRID)
+                        }
+                    }) {
                         MonthGrid()
                     }
                 }
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(vertical = 20.dp)
-                            .clip(
-                                RoundedCornerShape(120.dp)
-                            )
-                            .background(Color(255f, 255f, 255f, 0.5f))
-                    ) {
+                    Container(onclick = {
+                        coroutineScope.launch {
+                            PreferenceRepo(ctx).changeTopWidget(TopWidget.YEARGRID)
+                        }
+                    }) {
                         YearGrid()
                     }
                 }
