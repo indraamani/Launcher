@@ -1,6 +1,9 @@
 package launcher.focux.ui.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,9 +19,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -26,7 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import launcher.focux.R
+import launcher.focux.datastore.userpreference.PreferenceRepo
+import launcher.focux.datastore.userpreference.preferenceDatastore
 import launcher.focux.utils.fetchAllFont
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +43,8 @@ fun FontScreen(
     closeScreen: () -> Unit
 ) {
     val allfont = fetchAllFont()
+    val coroutineScope = rememberCoroutineScope()
+    val ctx = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -76,6 +86,7 @@ fun FontScreen(
                     Box(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
+
                     )
                     Text(
                         text = it.name,
@@ -90,6 +101,18 @@ fun FontScreen(
                             )
                             .background(Color(255f, 255f, 255f, 0.5f))
                             .padding(vertical = 30.dp)
+                            .combinedClickable(
+                                enabled = true,
+                                interactionSource = null,
+                                indication = null,
+                                onClick = {
+                                    coroutineScope.launch {
+//                                        Toast.makeText(ctx, it.resource.toString(), Toast.LENGTH_SHORT).show()
+                                        PreferenceRepo(ctx).changeFont(it.resource)
+                                    }
+                                }
+                            )
+
                     )
                 }
             }

@@ -8,6 +8,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
@@ -21,7 +23,7 @@ object PreferenceSerializer : Serializer<PreferenceModel> {
         return try {
             Json.decodeFromString(
                 deserializer = PreferenceModel.serializer(),
-                string = input.readAllBytes().toString()
+                string = input.readBytes().decodeToString()
             )
         } catch (exception : IOException) {
             throw CorruptionException(exception.toString())
@@ -32,10 +34,13 @@ object PreferenceSerializer : Serializer<PreferenceModel> {
         t: PreferenceModel,
         output: OutputStream
     ) {
-        Json.encodeToString(
+        val jsonString = Json.encodeToString(
             serializer = PreferenceModel.serializer(),
             value = t
-        ).toByteArray()
+        )
+        withContext(Dispatchers.IO) {
+            output.write(jsonString.encodeToByteArray())
+        }
     }
 }
 
