@@ -1,8 +1,5 @@
 package launcher.focux.utils
 
-import launcher.focux.AppModel
-import java.util.SortedMap
-
 
 fun List<AppModel>.sort() : Map<String, List<AppModel>> {
     val sorted : MutableMap<String, MutableList<AppModel>> = mutableMapOf()

@@ -3,9 +3,7 @@ package launcher.focux.datastore.app
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import launcher.focux.AppModel
-import java.util.SortedMap
+import launcher.focux.utils.AppModel
 
 class ApplicationRepo(
     private val context: Context

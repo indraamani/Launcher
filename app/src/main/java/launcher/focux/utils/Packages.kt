@@ -3,7 +3,6 @@ package launcher.focux.utils
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import launcher.focux.AppModel
 
 class Packages(ctx: Context) {
     private val packageManager: PackageManager = ctx.packageManager

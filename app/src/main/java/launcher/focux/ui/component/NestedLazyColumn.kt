@@ -1,7 +1,6 @@
 package launcher.focux.ui.component
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -21,17 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import launcher.focux.AppModel
+import launcher.focux.utils.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
 import java.util.Locale
-import java.util.SortedMap
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

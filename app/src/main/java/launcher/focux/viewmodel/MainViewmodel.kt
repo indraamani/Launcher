@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import launcher.focux.AppModel
+import launcher.focux.utils.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
 import launcher.focux.datastore.userpreference.PreferenceRepo

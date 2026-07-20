@@ -21,14 +21,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.stateIn
-import launcher.focux.AppModel
 import launcher.focux.datastore.app.InstalledPackage
 import launcher.focux.ui.component.NestedLazyColumn
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.DrawerViewmodel
-import java.util.SortedMap
 import androidx.compose.runtime.collectAsState
 
 class DrawerActivity : ComponentActivity() {

@@ -1,6 +1,5 @@
-package launcher.focux
+package launcher.focux.utils
 
-import android.content.Intent
 import kotlinx.serialization.Serializable
 
 @Serializable

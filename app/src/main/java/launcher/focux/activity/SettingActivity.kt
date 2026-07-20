@@ -18,7 +18,9 @@ class SettingActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FocuxTheme {
-                SettingNavigation()
+                SettingNavigation(
+                    viewModel
+                )
             }
         }
     }

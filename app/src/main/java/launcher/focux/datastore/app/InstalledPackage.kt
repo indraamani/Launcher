@@ -1,8 +1,7 @@
 package launcher.focux.datastore.app
 
 import kotlinx.serialization.Serializable
-import launcher.focux.AppModel
-import java.util.SortedMap
+import launcher.focux.utils.AppModel
 
 
 @Serializable
