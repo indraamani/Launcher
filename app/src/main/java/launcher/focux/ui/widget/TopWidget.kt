@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import launcher.focux.datastore.app.applicationDatastore
 import java.time.LocalDateTime
@@ -46,18 +49,20 @@ fun BoxedClock(font: Int) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            fontSize = 44.sp,
             text = dateTime.format(hour),
             fontFamily = FontFamily(
                 Font(font)
             ),
+            maxLines = 1,
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(12.dp)
                 )
                 .background(MaterialTheme.colorScheme.primary)
-                .width(60.dp)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .width(62.dp)
                 .padding(vertical = 10.dp),
+            fontSize = 34.sp,
             textAlign = TextAlign.Center
         )
         Box (
@@ -68,19 +73,24 @@ fun BoxedClock(font: Int) {
                 .size(6.dp)
                 .background(Color.LightGray)
         )
+        Box(
+
+        ) { }
         Text(
-            fontSize = 44.sp,
             text = dateTime.format(minute),
             fontFamily = FontFamily(
                 Font(font)
             ),
+            maxLines = 1,
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(12.dp)
                 )
                 .background(MaterialTheme.colorScheme.primary)
-                .width(60.dp)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .width(62.dp)
                 .padding(vertical = 10.dp),
+            fontSize = 34.sp,
             textAlign = TextAlign.Center
         )
     }
@@ -98,6 +108,7 @@ fun Clock(font: Int) {
     ) {
         Text(
             fontSize = 34.sp,
+            maxLines = 1,
             text = dateTime.format(hour),
             color = MaterialTheme.colorScheme.primary,
             fontFamily = FontFamily(
@@ -129,6 +140,7 @@ fun Clock(font: Int) {
         }
         Text(
             fontSize = 34.sp,
+            maxLines = 1,
             text = dateTime.format(minute),
             color = Color.White,
             fontFamily = FontFamily(

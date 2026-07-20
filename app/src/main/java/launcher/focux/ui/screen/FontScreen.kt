@@ -1,4 +1,4 @@
-package launcher.focux.ui.screens
+package launcher.focux.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,9 +30,10 @@ import launcher.focux.R
 import launcher.focux.utils.fetchAllFont
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun FontScreen() {
+fun FontScreen(
+    closeScreen: () -> Unit
+) {
     val allfont = fetchAllFont()
 
     Scaffold(
@@ -43,7 +43,7 @@ fun FontScreen() {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-
+                            closeScreen()
                         }
                     ) {
                         Icon(

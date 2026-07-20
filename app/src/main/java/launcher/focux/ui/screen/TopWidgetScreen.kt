@@ -1,4 +1,4 @@
-package launcher.focux.ui.screens
+package launcher.focux.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,9 +37,10 @@ import launcher.focux.ui.widget.MonthGrid
 import launcher.focux.ui.widget.YearGrid
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun TopWidgetScreen() {
+fun TopWidgetScreen(
+    closeScreen: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -47,7 +48,7 @@ fun TopWidgetScreen() {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-
+                            closeScreen()
                         }
                     ) {
                         Icon(
