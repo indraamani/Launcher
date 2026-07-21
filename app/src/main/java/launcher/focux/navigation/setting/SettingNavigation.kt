@@ -39,6 +39,7 @@ fun SettingNavigation(viewmodel: SettingViewmodel){
         }
         composable<TopWidgetScreen> {
             TopWidgetScreen(
+                viewmodel = viewmodel,
                 closeScreen = {
                     navController.popBackStack()
                 }

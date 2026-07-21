@@ -15,15 +15,15 @@ class PreferenceRepo(
             throw exception
         }
 
-    suspend fun toggleStatusBar(visiblity: Boolean) {
+    suspend fun toggleStatusBar(visibility: Boolean) {
         ctx.preferenceDatastore.updateData { current ->
-            current.copy(showStatusBar = visiblity)
+            current.copy(showStatusBar = visibility)
         }
     }
 
-    suspend fun toggleClock(visiblity: Boolean) {
+    suspend fun toggleClock(visibility: Boolean) {
         ctx.preferenceDatastore.updateData { current ->
-            current.copy(showClock = visiblity)
+            current.copy(showClock = visibility)
         }
     }
 

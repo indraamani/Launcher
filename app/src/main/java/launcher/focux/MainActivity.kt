@@ -3,6 +3,7 @@ package launcher.focux
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,7 +44,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.datastore.app.ApplicationRepo
@@ -51,6 +55,7 @@ import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.ui.component.widget.BatteryWidget
 import launcher.focux.ui.component.widget.BoxedClock
 import launcher.focux.ui.component.widget.Clock
+import launcher.focux.ui.component.widget.DateClockWidget
 import launcher.focux.ui.component.widget.DateWidget
 import launcher.focux.ui.component.widget.DayClockWidget
 import launcher.focux.ui.component.widget.DayWidget
@@ -67,10 +72,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        val insetController = WindowCompat
-            .getInsetsController(window, window.decorView)
-        insetController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        insetController.hide(WindowInsetsCompat.Type.statusBars())
+        lifecycleScope.launch {
+            val insetController = WindowCompat.getInsetsController(window, window.decorView)
+            insetController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+            viewModel.setting.collect {
+                if(!it.showStatusBar) {
+                    insetController.hide(WindowInsetsCompat.Type.statusBars())
+                } else {
+                    insetController.show(WindowInsetsCompat.Type.statusBars())
+                }
+            }
+        }
 
         setContent {
             FocuxTheme {
@@ -103,6 +116,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
     val pinnedAppList by viewmodel.pinnedApp.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var hasTriggered by remember { mutableStateOf(false) }
+    val setting = viewmodel.setting.collectAsStateWithLifecycle().value
     val topWidget = viewmodel.setting.collectAsStateWithLifecycle().value.topWidget
     val font = viewmodel.setting.collectAsStateWithLifecycle().value.font
 
@@ -143,6 +157,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
     ) {
         Box(
             modifier = Modifier
+                .visible(setting.showClock)
                 .padding(top = 126.dp)
         ) {
             when(topWidget) {
@@ -150,10 +165,10 @@ fun MainScreen(viewmodel: MainViewmodel) {
 
                 }
                 BOXED_CLOCK -> {
-                    BoxedClock(font)
+                    BoxedClock(font, setting.clockFormat)
                 }
                 CLOCK -> {
-                    Clock(font)
+                    Clock(font, setting.clockFormat)
                 }
                 DAY -> {
                     DayWidget(font)
@@ -162,10 +177,10 @@ fun MainScreen(viewmodel: MainViewmodel) {
                     DateWidget(font)
                 }
                 DAYCLOCK -> {
-                    DayClockWidget(font)
+                    DayClockWidget(font, setting.clockFormat)
                 }
                 DATECLOCK -> {
-                    DateWidget(font)
+                    DateClockWidget(font, setting.clockFormat)
                 }
                 HOURGRID -> {
                     HOURGRID

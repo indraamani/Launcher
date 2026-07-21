@@ -39,9 +39,9 @@ import java.time.Year
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun BoxedClock(font: Int) {
+fun BoxedClock(font: Int, format: Boolean) {
     val dateTime = LocalDateTime.now()
-    val hour = DateTimeFormatter.ofPattern("HH")
+    val hour = DateTimeFormatter.ofPattern(if (format) "hh" else "HH")
     val minute = DateTimeFormatter.ofPattern("mm")
 
     Row(
@@ -73,9 +73,6 @@ fun BoxedClock(font: Int) {
                 .size(6.dp)
                 .background(Color.LightGray)
         )
-        Box(
-
-        ) { }
         Text(
             text = dateTime.format(minute),
             fontFamily = FontFamily(
@@ -97,9 +94,9 @@ fun BoxedClock(font: Int) {
 }
 
 @Composable
-fun Clock(font: Int) {
+fun Clock(font: Int, format: Boolean) {
     val dateTime = LocalDateTime.now()
-    val hour = DateTimeFormatter.ofPattern("HH")
+    val hour = DateTimeFormatter.ofPattern(if (format) "hh" else "HH")
     val minute = DateTimeFormatter.ofPattern("mm")
 
     Row(
@@ -187,9 +184,9 @@ fun DateWidget(font: Int) {
 }
 
 @Composable
-fun DayClockWidget(font: Int) {
+fun DayClockWidget(font: Int, format: Boolean) {
     val dateTime = LocalDateTime.now()
-    val hour = DateTimeFormatter.ofPattern("HH")
+    val hour = DateTimeFormatter.ofPattern(if (format) "hh" else "HH")
     val minute = DateTimeFormatter.ofPattern("mm")
     val day = DateTimeFormatter.ofPattern("EEEE")
 
@@ -259,9 +256,9 @@ fun DayClockWidget(font: Int) {
 }
 
 @Composable
-fun DateClockWidget(font: Int) {
+fun DateClockWidget(font: Int, format: Boolean) {
     val dateTime = LocalDateTime.now()
-    val hour = DateTimeFormatter.ofPattern("HH")
+    val hour = DateTimeFormatter.ofPattern(if (format) "hh" else "HH")
     val minute = DateTimeFormatter.ofPattern("mm")
     val formate = DateTimeFormatter.ofPattern("EEE MMMM dd")
 

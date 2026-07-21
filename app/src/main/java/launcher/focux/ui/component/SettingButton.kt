@@ -36,6 +36,7 @@ fun SettingButton(
     logo: Painter,
     isCheckable: Boolean? = false,
     font: Int,
+    check: Boolean? = false,
     onCheckChange: () -> Unit? = {},
     onClick: () -> Unit? = {}
 ) {
@@ -77,7 +78,7 @@ fun SettingButton(
                     modifier = Modifier
                         .scale(0.7f)
                         .padding(8.dp),
-                    checked = true,
+                    checked = check!!,
                     onCheckedChange = {
                         onCheckChange()
                     }

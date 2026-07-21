@@ -25,9 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import launcher.focux.R
@@ -42,6 +45,7 @@ import launcher.focux.ui.component.widget.HourGrid
 import launcher.focux.ui.component.widget.MonthGrid
 import launcher.focux.ui.component.widget.YearGrid
 import launcher.focux.utils.TopWidget
+import launcher.focux.viewmodel.SettingViewmodel
 
 @Composable
 fun Container(
@@ -74,10 +78,12 @@ fun Container(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopWidgetScreen(
+    viewmodel: SettingViewmodel,
     closeScreen: () -> Unit
 ) {
     val ctx = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val setting = viewmodel.setting.collectAsStateWithLifecycle().value
 
     Scaffold(
         topBar = {
@@ -104,6 +110,9 @@ fun TopWidgetScreen(
         ) {
             Text(
                 text = "Choose Top Widget",
+                fontFamily = FontFamily(
+                    Font(setting.font)
+                ),
                 modifier = Modifier
                     .padding(horizontal = 12.dp, 30.dp),
                 fontSize = 22.sp,
@@ -118,7 +127,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.BOXED_CLOCK)
                         }
                     }) {
-                        BoxedClock(R.font.valorant)
+                        BoxedClock(setting.font, setting.clockFormat)
                     }
                 }
 
@@ -128,7 +137,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.CLOCK)
                         }
                     }) {
-                        Clock(R.font.valorant)
+                        Clock(setting.font, setting.clockFormat)
                     }
                 }
 
@@ -138,7 +147,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DAY)
                         }
                     }) {
-                        DayWidget(R.font.valorant)
+                        DayWidget(setting.font)
                     }
                 }
 
@@ -148,7 +157,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DATE)
                         }
                     }) {
-                        DateWidget(R.font.valorant)
+                        DateWidget(setting.font)
                     }
                 }
 
@@ -158,7 +167,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DAYCLOCK)
                         }
                     }) {
-                        DayClockWidget(R.font.valorant)
+                        DayClockWidget(setting.font, setting.clockFormat)
                     }
                 }
 
@@ -168,7 +177,7 @@ fun TopWidgetScreen(
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DATECLOCK)
                         }
                     }) {
-                        DateClockWidget(R.font.valorant)
+                        DateClockWidget(setting.font, setting.clockFormat)
                     }
                 }
 

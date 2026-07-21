@@ -21,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Focux">
 
-
         <activity
             android:name=".activity.DrawerActivity"
             android:exported="false"

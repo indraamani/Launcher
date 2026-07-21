@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,7 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import launcher.focux.R
+import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.SettingButton
 import launcher.focux.viewmodel.SettingViewmodel
 
@@ -37,9 +43,10 @@ fun SettingScreen(
     openFontScreen: () -> Unit,
     openTopwidgetScreen: () -> Unit
 ) {
-    var context = LocalContext.current as? Activity
+    var context = LocalContext.current// as? Activity
     var scrollState = rememberScrollState()
-    val font = viewmodel.settings.collectAsStateWithLifecycle().value.font
+    val coroutineScope = rememberCoroutineScope()
+    val settings = viewmodel.setting.collectAsStateWithLifecycle().value
 
     Scaffold(
         modifier = Modifier
@@ -52,14 +59,14 @@ fun SettingScreen(
                         fontSize = 20.sp,
                         modifier = Modifier.padding(start = 6.dp),
                         fontFamily = FontFamily(
-                            Font(font)
+                            Font(settings.font)
                         )
                     )
                 },
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            context?.finish()
+                            (context as Activity).finish()
                         }
                     ) {
                         Icon(painter = painterResource(R.drawable.arrow), contentDescription = null)
@@ -81,20 +88,20 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
                 text = "Customisations",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Choose Home Theme",
                 painterResource(R.drawable.lucide_palette),
-                font = font,
+                font = settings.font,
                 onClick = {
                 },
             )
             SettingButton(
                 "Choose Font",
                 painterResource(R.drawable.lucide_case_sensitive),
-                font = font,
+                font = settings.font,
                 onClick = {
                     openFontScreen()
                 },
@@ -102,7 +109,7 @@ fun SettingScreen(
             SettingButton(
                 "Choose Top Widget",
                 painterResource(R.drawable.lucide_chart_no_axes_gantt),
-                font = font,
+                font = settings.font,
                 onClick = {
                     openTopwidgetScreen()
                 },
@@ -110,20 +117,26 @@ fun SettingScreen(
             SettingButton(
                 "Choose Bottom Widget",
                 painterResource(R.drawable.lucide_list_end),
-                font = font,
+                font = settings.font,
                 onClick = { },
             )
             SettingButton(
                 "Show Status Bar",
                 painterResource(R.drawable.alarm_clock),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
-                onCheckChange = { }
+                check = settings.showStatusBar,
+                onCheckChange = {
+                    coroutineScope.launch {
+                        PreferenceRepo(context).toggleStatusBar(!settings.showStatusBar)
+                    }
+                    return@SettingButton null
+                }
             )
             SettingButton(
                 "Enable Haptic Feedback",
                 painterResource(R.drawable.lucide_blend),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
                 onCheckChange = { }
             )
@@ -133,27 +146,27 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 text = "Swipe App Launch Customisations",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Enable Swipe to Launch app",
                 painterResource(R.drawable.alarm_clock),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
                 onCheckChange = { }
             )
             SettingButton(
                 "Enable Swipe Up To Open Search",
                 painterResource(R.drawable.alarm_clock),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
                 onCheckChange = { }
             )
             SettingButton(
                 "Choose Swipe Launch Apps",
                 painterResource(R.drawable.activity),
-                font = font,
+                font = settings.font,
                 onClick = {
 
                 }
@@ -164,22 +177,34 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 text = "Swipe App Launch Customisations",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Show Clock on Home",
                 painterResource(R.drawable.alarm_clock),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
-                onCheckChange = { }
+                check = settings.showClock,
+                onCheckChange = {
+                    coroutineScope.launch {
+                        PreferenceRepo(context).toggleClock(!settings.showClock)
+                    }
+                    return@SettingButton null
+                }
             )
             SettingButton(
                 "12 Hr Format",
                 painterResource(R.drawable.lucide_alarm_clock_off),
-                font = font,
+                font = settings.font,
                 isCheckable = true,
-                onCheckChange = { }
+                check = settings.clockFormat,
+                onCheckChange = {
+                    coroutineScope.launch {
+                        PreferenceRepo(context).changeClockFormat(!settings.clockFormat)
+                    }
+                    return@SettingButton null
+                }
             )
             Text(
                 fontSize = 16.sp,
@@ -187,13 +212,13 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 text = "Hidden Apps",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Modify Hidden Apps",
                 painterResource(R.drawable.lucide_ban),
-                font = font,
+                font = settings.font,
                 onClick = {
 
                 }
@@ -204,13 +229,13 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 text = "Renamed Apps",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Modify/View Renamed Apps",
                 painterResource(R.drawable.lucide_route),
-                font = font,
+                font = settings.font,
                 onClick = {
 
                 }
@@ -221,13 +246,13 @@ fun SettingScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                 text = "Pinned Apps Customization",
                 fontFamily = FontFamily(
-                    Font(font)
+                    Font(settings.font)
                 )
             )
             SettingButton(
                 "Modifed Pinned Apps",
                 painterResource(R.drawable.lucide_grid),
-                font = font,
+                font = settings.font,
                 onClick = {
 
                 }

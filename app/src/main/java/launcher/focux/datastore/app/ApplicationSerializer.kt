@@ -22,7 +22,7 @@ object ApplicationSerializer : Serializer<InstalledPackage> {
                 deserializer = InstalledPackage.serializer(),
                 string = input.readAllBytes().decodeToString()
             )
-        } catch (exception : SerializationException) {
+        } catch (exception : Exception) {
             throw CorruptionException(exception.toString())
         }
     }

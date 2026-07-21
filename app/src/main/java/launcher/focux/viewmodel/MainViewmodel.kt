@@ -22,9 +22,9 @@ import java.util.Collections.emptySortedMap
 
 class MainViewmodel(application: Application) : AndroidViewModel(application) {
 
-    val pinnedAppRepo = PinnedAppRepo(application)
+    val _pinnedAppRepo = PinnedAppRepo(application)
 
-    val pinnedApp: StateFlow<List<PinnedApp>> = pinnedAppRepo.pinnedAppFlow.stateIn(
+    val pinnedApp: StateFlow<List<PinnedApp>> = _pinnedAppRepo.pinnedAppFlow.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList<PinnedApp>()
