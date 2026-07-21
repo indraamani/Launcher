@@ -9,10 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,6 +31,11 @@ import launcher.focux.ui.component.NestedLazyColumn
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.DrawerViewmodel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import launcher.focux.ui.component.BottomSheet
 
 class DrawerActivity : ComponentActivity() {
     private val viewModel : DrawerViewmodel by viewModels()
@@ -59,9 +69,9 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         }
     }
     val listt = viewmodel.packages.collectAsStateWithLifecycle(InstalledPackage(allPackages = emptyMap()))
+    val btmsheeetstate = rememberBottomSheetScaffoldState()
 
-
-    Scaffold(
+    BottomSheetScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(nestedScroll),
@@ -70,17 +80,28 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
                 title = {
                     Text(
                         text = "Applications",
-
                     )
                 },
+
             )
-        }
+        },
+        sheetPeekHeight = 0.dp,
+        sheetSwipeEnabled = true,
+        scaffoldState = btmsheeetstate,
+        sheetContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        sheetContent = {
+            BottomSheet()
+        },
+        sheetShape = RoundedCornerShape(
+            topStart = 16.dp,
+            topEnd = 16.dp
+        )
     ) { innerPadding ->
         NestedLazyColumn(
             modifier = Modifier
                 .padding(innerPadding),
             viewmodel.setting.collectAsState().value.font,
-            apps = listt.value?.allPackages!!
+            apps = listt.value.allPackages,
         )
     }
 }
