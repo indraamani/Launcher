@@ -31,20 +31,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import launcher.focux.R
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.datastore.userpreference.preferenceDatastore
 import launcher.focux.utils.fetchAllFont
+import launcher.focux.viewmodel.SettingViewmodel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FontScreen(
+    viewmodel: SettingViewmodel,
     closeScreen: () -> Unit
 ) {
-    val allfont = fetchAllFont()
+    val allFont = fetchAllFont()
     val coroutineScope = rememberCoroutineScope()
     val ctx = LocalContext.current
+    val font = viewmodel.setting.collectAsStateWithLifecycle().value.font
 
     Scaffold(
         topBar = {
@@ -75,18 +79,22 @@ fun FontScreen(
                 modifier = Modifier
                     .padding(horizontal = 12.dp, 30.dp),
                 fontSize = 28.sp,
+                fontFamily = FontFamily(
+                    Font(
+                        font
+                    )
+                )
             )
 
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 20.dp)
             ) {
                 items(
-                    items = allfont,
+                    items = allFont,
                 ) {
                     Box(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
-
                     )
                     Text(
                         text = it.name,
@@ -99,7 +107,7 @@ fun FontScreen(
                             .clip(
                                 RoundedCornerShape(40.dp)
                             )
-                            .background(Color(255f, 255f, 255f, 0.5f))
+                            .background(Color.White.copy(alpha = 0.1f))
                             .padding(vertical = 30.dp)
                             .combinedClickable(
                                 enabled = true,
@@ -107,12 +115,10 @@ fun FontScreen(
                                 indication = null,
                                 onClick = {
                                     coroutineScope.launch {
-//                                        Toast.makeText(ctx, it.resource.toString(), Toast.LENGTH_SHORT).show()
                                         PreferenceRepo(ctx).changeFont(it.resource)
                                     }
                                 }
                             )
-
                     )
                 }
             }

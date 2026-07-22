@@ -231,7 +231,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
             modifier = Modifier
                 .padding(bottom = 40.dp)
         ) {
-            BatteryWidget(context)
+            DayWidget()
         }
 
     }

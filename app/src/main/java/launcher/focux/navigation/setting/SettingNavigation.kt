@@ -31,6 +31,7 @@ fun SettingNavigation(viewmodel: SettingViewmodel){
         composable<FontScreen> {
 
             FontScreen(
+                viewmodel = viewmodel,
                 closeScreen = {
                     navController.popBackStack()
 
