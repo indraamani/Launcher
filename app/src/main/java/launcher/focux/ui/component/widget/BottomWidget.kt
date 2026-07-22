@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.sp
 import java.time.LocalDateTime
 
 @Composable
-fun DayWidget() {
-    val day = LocalDateTime.now().dayOfWeek.name
+fun BatteryWidget(ctx : Context) {
+    val manager = ctx.getSystemService(BATTERY_SERVICE) as BatteryManager
+    val battery = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 
     Text(
-        text = day.lowercase().replaceFirstChar { it.titlecase() },
+        text = battery.toString(),
         fontSize = 12.sp,
         modifier = Modifier
             .clip(
@@ -41,12 +42,23 @@ fun DayWidget() {
 }
 
 @Composable
-fun BatteryWidget(ctx : Context) {
-    val manager = ctx.getSystemService(BATTERY_SERVICE) as BatteryManager
-    val battery = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+fun googleSearch() {
+
+
+}
+
+@Composable
+fun unlockCount() {
+
+}
+
+
+@Composable
+fun DayWidget() {
+    val day = LocalDateTime.now().dayOfWeek.name
 
     Text(
-        text = battery.toString(),
+        text = day.lowercase().replaceFirstChar { it.titlecase() },
         fontSize = 12.sp,
         modifier = Modifier
             .clip(

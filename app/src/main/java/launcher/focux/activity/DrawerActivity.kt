@@ -8,8 +8,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -35,6 +39,8 @@ import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.viewmodel.DrawerViewmodel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asStateFlow
@@ -88,6 +94,20 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
                     )
                 },
 
+            )
+        },
+        sheetDragHandle = {
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 10.dp)
+                    .height(4.dp)
+                    .width(40.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            20.dp
+                        )
+                    )
+                    .background(Color.White)
             )
         },
         sheetPeekHeight = 0.dp,

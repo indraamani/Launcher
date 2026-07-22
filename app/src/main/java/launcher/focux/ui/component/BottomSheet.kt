@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +53,6 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
             Button(
                 onClick =  {
 
-                    Toast.makeText(context, "package:${appModel.packageName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     intent.setData("package:${appModel.packageName}".toUri())
                     context.startActivity(intent)
@@ -70,7 +70,7 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
                 )
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.activity),
+                    painter = painterResource(R.drawable.lucide_info),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 10.dp)
@@ -91,7 +91,7 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
                     .padding(start = 6.dp),
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.activity),
+                    painter = painterResource(R.drawable.lucide_ban),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 10.dp)
@@ -115,7 +115,7 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
 
         ) {
             Icon(
-                painter = painterResource(R.drawable.activity),
+                painter = painterResource(R.drawable.lucide_circle_off),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -148,14 +148,14 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
 
         ) {
             Icon(
-                painter = painterResource(R.drawable.activity),
+                painter = painterResource(R.drawable.lucide_bookmark),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .size(16.dp)
             )
             Text(
-                text = "App To Pinned Apps"
+                text = "Pin App"
             )
         }
 
@@ -175,7 +175,7 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
 
         ) {
             Icon(
-                painter = painterResource(R.drawable.activity),
+                painter = painterResource(R.drawable.lucide_pencil),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -205,7 +205,7 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
 
         ) {
             Icon(
-                painter = painterResource(R.drawable.activity),
+                painter = painterResource(R.drawable.lucide_trash),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 10.dp)

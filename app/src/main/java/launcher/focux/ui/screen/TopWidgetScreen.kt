@@ -62,7 +62,7 @@ fun Container(
             .clip(
                 RoundedCornerShape(120.dp)
             )
-            .background(Color(255f, 255f, 255f, 0.5f))
+            .background(Color.White.copy(alpha = 0.1f))
             .combinedClickable(
                 enabled = true,
                 indication = null,
