@@ -124,7 +124,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+//            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
 //            .padding(top = 110.dp, bottom = 40.dp)
             .combinedClickable(
