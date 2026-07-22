@@ -1,6 +1,7 @@
 package launcher.focux.ui.component
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -26,14 +30,21 @@ import kotlinx.coroutines.launch
 import launcher.focux.utils.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
+import launcher.focux.viewmodel.DrawerViewmodel
 import java.util.Locale
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun NestedLazyColumn(modifier: Modifier, font: Int, apps: Map<String, List<AppModel>>) {
+fun NestedLazyColumn(
+    modifier: Modifier,
+    viewmodel: DrawerViewmodel,
+    apps: Map<String, List<AppModel>>,
+    bottomSheet: BottomSheetScaffoldState
+) {
     // remove
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val font = viewmodel.setting.collectAsState().value.font
 
     LazyColumn(
         contentPadding = PaddingValues(bottom = 12.dp),
@@ -80,12 +91,11 @@ fun NestedLazyColumn(modifier: Modifier, font: Int, apps: Map<String, List<AppMo
                             },
                             onLongClick = {
                                 coroutineScope.launch {
-                                    PinnedAppRepo(context).add(
-                                        PinnedApp(
-                                            it.name,
-                                            it.packageName
-                                        )
+                                    viewmodel.selectedApp.value = AppModel(
+                                        it.name,
+                                        it.packageName
                                     )
+                                    bottomSheet.bottomSheetState.expand()
                                 }
                             }
                         )

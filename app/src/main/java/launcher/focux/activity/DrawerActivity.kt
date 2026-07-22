@@ -3,6 +3,7 @@ package launcher.focux.activity
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -34,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import launcher.focux.ui.component.BottomSheet
 
@@ -54,6 +58,7 @@ class DrawerActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
+    val bottomSheet = rememberBottomSheetScaffoldState()
     val nestedScroll = remember {
         object : NestedScrollConnection {
             override fun onPostScroll(
@@ -61,7 +66,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                if (available.y > 100) {
+                if (available.y > 100 && bottomSheet.bottomSheetState.currentValue != SheetValue.Expanded){
                     (ctx as Activity).finish()
                 }
                 return super.onPostScroll(consumed, available, source)
@@ -69,7 +74,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         }
     }
     val listt = viewmodel.packages.collectAsStateWithLifecycle(InstalledPackage(allPackages = emptyMap()))
-    val btmsheeetstate = rememberBottomSheetScaffoldState()
+    val app = viewmodel.selectedApp.collectAsStateWithLifecycle().value
 
     BottomSheetScaffold(
         modifier = Modifier
@@ -87,10 +92,10 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         },
         sheetPeekHeight = 0.dp,
         sheetSwipeEnabled = true,
-        scaffoldState = btmsheeetstate,
+        scaffoldState = bottomSheet,
         sheetContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
         sheetContent = {
-            BottomSheet()
+            BottomSheet(bottomSheet,app)
         },
         sheetShape = RoundedCornerShape(
             topStart = 16.dp,
@@ -100,8 +105,9 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         NestedLazyColumn(
             modifier = Modifier
                 .padding(innerPadding),
-            viewmodel.setting.collectAsState().value.font,
+            viewmodel,
             apps = listt.value.allPackages,
+            bottomSheet = bottomSheet
         )
     }
 }

@@ -1,14 +1,18 @@
 package launcher.focux.viewmodel
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import launcher.focux.datastore.app.applicationDatastore
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.datastore.userpreference.PreferenceModel
+import launcher.focux.utils.AppModel
 
 class DrawerViewmodel(application: Application) : AndroidViewModel(application) {
 
@@ -19,4 +23,7 @@ class DrawerViewmodel(application: Application) : AndroidViewModel(application) 
         started = SharingStarted.Eagerly,
         initialValue = PreferenceModel()
     )
+
+    var selectedApp = MutableStateFlow<AppModel>(AppModel())
+
 }
