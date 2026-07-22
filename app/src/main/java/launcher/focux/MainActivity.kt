@@ -50,6 +50,7 @@ import kotlinx.coroutines.withContext
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.datastore.app.ApplicationRepo
+import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.ui.component.widget.BatteryWidget
@@ -95,9 +96,14 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.packages.collect {
-                ApplicationRepo(this@MainActivity)
-                    .update(it)
+            viewModel.setting.collect {
+                if (it.isFreshInstall) {
+                    PreferenceRepo(this@MainActivity).isFreshInstall()
+                    viewModel.packages.collect {
+                        ApplicationRepo(this@MainActivity)
+                            .update(it)
+                    }
+                }
             }
         }
 
@@ -124,7 +130,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+//            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
 //            .padding(top = 110.dp, bottom = 40.dp)
             .combinedClickable(

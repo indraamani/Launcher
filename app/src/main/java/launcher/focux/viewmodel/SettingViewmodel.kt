@@ -20,6 +20,7 @@ class SettingViewmodel(application : Application) : AndroidViewModel(application
         initialValue = PreferenceModel()
     )
 
+    val font = application.preferenceDatastore.data
 
 
 }

@@ -26,20 +26,23 @@
             android:name=".activity.DrawerActivity"
             android:exported="false"
             android:label="@string/title_activity_drawer"
-            android:theme="@style/Theme.Focux" />
+            android:theme="@style/Theme.Focux"
+            android:excludeFromRecents="true"/>
 
         <activity
             android:name=".activity.SettingActivity"
             android:exported="false"
             android:label="@string/title_activity_setting"
-            android:theme="@style/Theme.Focux" />
+            android:theme="@style/Theme.Focux"
+            android:excludeFromRecents="true"/>
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
-            android:theme="@style/Theme.Focux">
+            android:theme="@style/Theme.Focux"
+            android:excludeFromRecents="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

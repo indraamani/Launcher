@@ -9,8 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import launcher.focux.utils.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
@@ -40,14 +42,17 @@ class MainViewmodel(application: Application) : AndroidViewModel(application) {
     val packages = _packages.asStateFlow()
 
     init {
-        loadApplication()
+        viewModelScope.launch {
+            loadApplication()
+        }
     }
 
-    fun loadApplication() {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val pkgs = Packages(application).fetchAllPackages()
-            _packages.value = pkgs.sort()
+    suspend fun loadApplication() : Unit = withContext(Dispatchers.IO) {
+        setting.collect {
+            if (it.isFreshInstall) {
+                val pkgs = Packages(application).fetchAllPackages()
+                _packages.value = pkgs.sort()
+            }
         }
     }
 }

@@ -43,7 +43,6 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.onSecondaryContainer)
             .padding(horizontal = 12.dp, vertical = 20.dp)
     ) {
         Row(

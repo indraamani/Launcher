@@ -1,6 +1,5 @@
 package launcher.focux.ui.screen
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,19 +22,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import launcher.focux.R
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.SettingButton
 import launcher.focux.viewmodel.SettingViewmodel
 
 
-@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
@@ -43,8 +37,8 @@ fun SettingScreen(
     openFontScreen: () -> Unit,
     openTopwidgetScreen: () -> Unit
 ) {
-    var context = LocalContext.current// as? Activity
-    var scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val settings = viewmodel.setting.collectAsStateWithLifecycle().value
 
@@ -85,7 +79,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 10.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -143,7 +137,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Swipe App Launch Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -174,7 +168,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Swipe App Launch Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -209,7 +203,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Hidden Apps",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -226,7 +220,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Renamed Apps",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -243,7 +237,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                modifier = Modifier.padding(16.dp),
                 text = "Pinned Apps Customization",
                 fontFamily = FontFamily(
                     Font(settings.font)

@@ -54,4 +54,13 @@ class PreferenceRepo(
             current.copy(bottomWidget = widget)
         }
     }
+
+    suspend fun isFreshInstall() {
+        ctx.preferenceDatastore.updateData { current ->
+            if(current.isFreshInstall) {
+                current.copy(isFreshInstall = false)
+            }
+            current
+        }
+    }
 }

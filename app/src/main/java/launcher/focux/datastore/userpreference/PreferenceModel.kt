@@ -11,6 +11,7 @@ data class PreferenceModel(
     val showClock: Boolean = true,
     val clockFormat: Boolean = false, /* false = 24 hours format, true = 12 hours format */
     val font: Int = R.font.valorant,
+    val isFreshInstall: Boolean = true,
     val topWidget: TopWidget = TopWidget.DEFAULT,
     val bottomWidget: BottomWidget = BottomWidget.DEFAULT,
 )
