@@ -1,15 +1,16 @@
 package launcher.focux
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.LauncherApps
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
+import android.os.UserHandle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -44,16 +45,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.datastore.app.ApplicationRepo
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.ui.component.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
-import launcher.focux.ui.component.widget.BatteryWidget
 import launcher.focux.ui.component.widget.BoxedClock
 import launcher.focux.ui.component.widget.Clock
 import launcher.focux.ui.component.widget.DateClockWidget
@@ -62,12 +62,63 @@ import launcher.focux.ui.component.widget.DayClockWidget
 import launcher.focux.ui.component.widget.DayWidget
 import launcher.focux.ui.component.widget.MonthGrid
 import launcher.focux.ui.component.widget.YearGrid
+import launcher.focux.utils.Packages
 import launcher.focux.utils.TopWidget.*
+import launcher.focux.utils.sort
 import launcher.focux.viewmodel.MainViewmodel
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel : MainViewmodel by viewModels()
+    private lateinit var launcherApps : LauncherApps
+    private val launcherCallback = object : LauncherApps.Callback() {
+        override fun onPackageAdded(p0: String?, p1: UserHandle?) {
+            CoroutineScope(Dispatchers.IO).launch {
+                ApplicationRepo(this@MainActivity)
+                    .update(
+                        Packages(this@MainActivity)
+                            .fetchAllPackages().sort()
+                    )
+            }
+        }
+
+        override fun onPackageChanged(p0: String?, p1: UserHandle?) {
+            CoroutineScope(Dispatchers.IO).launch {
+                ApplicationRepo(this@MainActivity)
+                    .update(
+                        Packages(this@MainActivity)
+                            .fetchAllPackages().sort()
+                    )
+            }
+        }
+
+        override fun onPackageRemoved(p0: String?, p1: UserHandle?) {
+            CoroutineScope(Dispatchers.IO).launch {
+                ApplicationRepo(this@MainActivity)
+                    .update(
+                        Packages(this@MainActivity)
+                            .fetchAllPackages().sort()
+                    )
+            }
+        }
+
+        override fun onPackagesAvailable(
+            p0: Array<out String?>?,
+            p1: UserHandle?,
+            p2: Boolean
+        ) {
+
+        }
+
+        override fun onPackagesUnavailable(
+            p0: Array<out String?>?,
+            p1: UserHandle?,
+            p2: Boolean
+        ) {
+
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,15 +137,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        setContent {
-            FocuxTheme {
-                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-                    MainScreen(viewModel)
-                else
-                    HiddenScreen()
-            }
-        }
-
         lifecycleScope.launch {
             viewModel.setting.collect {
                 if (it.isFreshInstall) {
@@ -104,6 +146,19 @@ class MainActivity : ComponentActivity() {
                             .update(it)
                     }
                 }
+            }
+        }
+
+        launcherApps = getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+        launcherApps.registerCallback(launcherCallback)
+
+
+        setContent {
+            FocuxTheme {
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                    MainScreen(viewModel)
+                else
+                    HiddenScreen()
             }
         }
 
