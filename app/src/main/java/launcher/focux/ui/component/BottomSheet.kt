@@ -20,6 +20,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,16 +33,21 @@ import androidx.compose.ui.unit.dp
 import launcher.focux.R
 import launcher.focux.utils.AppModel
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import launcher.focux.datastore.app.ApplicationRepo
 import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
+import launcher.focux.ui.component.popup.RenamePopup
+import launcher.focux.viewmodel.DrawerViewmodel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
+fun BottomSheet(sheetState: BottomSheetScaffoldState, viewmodel: DrawerViewmodel) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val appModel = viewmodel.selectedApp.collectAsStateWithLifecycle().value
+
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -160,8 +168,9 @@ fun BottomSheet(sheetState: BottomSheetScaffoldState, appModel: AppModel) {
 
         Button(
             onClick =  {
+                viewmodel.toggleShow()
                 coroutineScope.launch {
-
+                    sheetState.bottomSheetState.partialExpand()
                 }
             },
             shape = RoundedCornerShape(

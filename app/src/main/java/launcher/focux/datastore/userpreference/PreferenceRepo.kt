@@ -1,6 +1,7 @@
 package launcher.focux.datastore.userpreference
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import launcher.focux.utils.BottomWidget
@@ -55,12 +56,17 @@ class PreferenceRepo(
         }
     }
 
-    suspend fun isFreshInstall() {
+    // PreferenceRepo.kt
+    suspend fun checkAndSetFirstLaunch(): Boolean {
+        var wasFirstTime = false
         ctx.preferenceDatastore.updateData { current ->
-            if(current.isFreshInstall) {
+            if (current.isFreshInstall) {
+                wasFirstTime = true
                 current.copy(isFreshInstall = false)
+            } else {
+                current
             }
-            current
         }
+        return wasFirstTime
     }
 }

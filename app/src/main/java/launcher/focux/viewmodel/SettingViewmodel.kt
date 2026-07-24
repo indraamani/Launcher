@@ -14,7 +14,7 @@ import launcher.focux.datastore.userpreference.preferenceDatastore
 
 class SettingViewmodel(application : Application) : AndroidViewModel(application) {
 
-    val setting : StateFlow<PreferenceModel> = PreferenceRepo(application).setting.stateIn(
+    val setting : StateFlow<PreferenceModel> = application.preferenceDatastore.data.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = PreferenceModel()

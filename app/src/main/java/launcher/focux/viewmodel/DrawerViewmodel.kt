@@ -9,21 +9,35 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import launcher.focux.datastore.app.ApplicationRepo
+import launcher.focux.datastore.app.InstalledPackage
 import launcher.focux.datastore.app.applicationDatastore
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.datastore.userpreference.PreferenceModel
+import launcher.focux.datastore.userpreference.preferenceDatastore
 import launcher.focux.utils.AppModel
 
 class DrawerViewmodel(application: Application) : AndroidViewModel(application) {
 
-    val packages = application.applicationDatastore.data
+    val packages = application.applicationDatastore.data.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        InstalledPackage()
+    )
 
-    val setting: StateFlow<PreferenceModel> = PreferenceRepo(application).setting.stateIn(
+    val setting: StateFlow<PreferenceModel> = application.preferenceDatastore.data.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = PreferenceModel()
     )
 
     var selectedApp = MutableStateFlow<AppModel>(AppModel())
+
+    private var _show = MutableStateFlow(false)
+    var show = _show.asStateFlow()
+
+    fun toggleShow() {
+        _show.value = !_show.value
+    }
 
 }

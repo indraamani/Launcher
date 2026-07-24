@@ -18,6 +18,7 @@ import launcher.focux.datastore.pinnedapp.PinnedApp
 import launcher.focux.datastore.pinnedapp.PinnedAppRepo
 import launcher.focux.datastore.userpreference.PreferenceRepo
 import launcher.focux.datastore.userpreference.PreferenceModel
+import launcher.focux.datastore.userpreference.preferenceDatastore
 import launcher.focux.utils.Packages
 import launcher.focux.utils.sort
 import java.util.Collections.emptySortedMap
@@ -32,27 +33,9 @@ class MainViewmodel(application: Application) : AndroidViewModel(application) {
         initialValue = emptyList<PinnedApp>()
     )
 
-    val setting: StateFlow<PreferenceModel> = PreferenceRepo(application).setting.stateIn(
+    val setting: StateFlow<PreferenceModel?> = application.preferenceDatastore.data.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = PreferenceModel()
     )
-
-    private var _packages = MutableStateFlow<Map<String, List<AppModel>>>(emptySortedMap<String, List<AppModel>>())
-    val packages = _packages.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            loadApplication()
-        }
-    }
-
-    suspend fun loadApplication() : Unit = withContext(Dispatchers.IO) {
-        setting.collect {
-            if (it.isFreshInstall) {
-                val pkgs = Packages(application).fetchAllPackages()
-                _packages.value = pkgs.sort()
-            }
-        }
-    }
 }

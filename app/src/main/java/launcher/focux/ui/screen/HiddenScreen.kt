@@ -1,4 +1,4 @@
-package launcher.focux.ui.component
+package launcher.focux.ui.screen
 
 import androidx.compose.runtime.Composable
 

@@ -6,6 +6,7 @@ import android.content.pm.LauncherApps
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.UserHandle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -47,12 +48,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import launcher.focux.activity.DrawerActivity
 import launcher.focux.activity.SettingActivity
 import launcher.focux.datastore.app.ApplicationRepo
 import launcher.focux.datastore.userpreference.PreferenceRepo
-import launcher.focux.ui.component.HiddenScreen
+import launcher.focux.ui.screen.HiddenScreen
 import launcher.focux.ui.theme.FocuxTheme
 import launcher.focux.ui.component.widget.BoxedClock
 import launcher.focux.ui.component.widget.Clock
@@ -70,6 +74,7 @@ import launcher.focux.viewmodel.MainViewmodel
 class MainActivity : ComponentActivity() {
 
     private val viewModel : MainViewmodel by viewModels()
+
     private lateinit var launcherApps : LauncherApps
     private val launcherCallback = object : LauncherApps.Callback() {
         override fun onPackageAdded(p0: String?, p1: UserHandle?) {
@@ -129,7 +134,7 @@ class MainActivity : ComponentActivity() {
             insetController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
             viewModel.setting.collect {
-                if(!it.showStatusBar) {
+                if(!it!!.showStatusBar) {
                     insetController.hide(WindowInsetsCompat.Type.statusBars())
                 } else {
                     insetController.show(WindowInsetsCompat.Type.statusBars())
@@ -137,15 +142,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.setting.collect {
-                if (it.isFreshInstall) {
-                    PreferenceRepo(this@MainActivity).isFreshInstall()
-                    viewModel.packages.collect {
-                        ApplicationRepo(this@MainActivity)
-                            .update(it)
-                    }
-                }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val isFirstTime = PreferenceRepo(this@MainActivity).checkAndSetFirstLaunch()
+            if (isFirstTime) {
+                ApplicationRepo(this@MainActivity)
+                    .update(
+                        Packages(this@MainActivity)
+                            .fetchAllPackages()
+                            .sort()
+                    )
             }
         }
 
@@ -177,9 +182,8 @@ fun MainScreen(viewmodel: MainViewmodel) {
     val pinnedAppList by viewmodel.pinnedApp.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var hasTriggered by remember { mutableStateOf(false) }
-    val setting = viewmodel.setting.collectAsStateWithLifecycle().value
-    val topWidget = viewmodel.setting.collectAsStateWithLifecycle().value.topWidget
-    val font = viewmodel.setting.collectAsStateWithLifecycle().value.font
+    val setting by viewmodel.setting.collectAsStateWithLifecycle()
+    val font = setting!!.font
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -218,18 +222,18 @@ fun MainScreen(viewmodel: MainViewmodel) {
     ) {
         Box(
             modifier = Modifier
-                .visible(setting.showClock)
+                .visible(setting!!.showClock)
                 .padding(top = 126.dp)
         ) {
-            when(topWidget) {
+            when(setting!!.topWidget) {
                 DEFAULT -> {
 
                 }
                 BOXED_CLOCK -> {
-                    BoxedClock(font, setting.clockFormat)
+                    BoxedClock(font, setting!!.clockFormat)
                 }
                 CLOCK -> {
-                    Clock(font, setting.clockFormat)
+                    Clock(font, setting!!.clockFormat)
                 }
                 DAY -> {
                     DayWidget(font)
@@ -238,10 +242,10 @@ fun MainScreen(viewmodel: MainViewmodel) {
                     DateWidget(font)
                 }
                 DAYCLOCK -> {
-                    DayClockWidget(font, setting.clockFormat)
+                    DayClockWidget(font, setting!!.clockFormat)
                 }
                 DATECLOCK -> {
-                    DateClockWidget(font, setting.clockFormat)
+                    DateClockWidget(font, setting!!.clockFormat)
                 }
                 HOURGRID -> {
                     HOURGRID
@@ -270,7 +274,7 @@ fun MainScreen(viewmodel: MainViewmodel) {
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 20.sp,
                     fontFamily = FontFamily(
-                        Font( viewmodel.setting.collectAsState().value.font)
+                        Font( setting!!.font)
                     ),
                     modifier = Modifier
                         .wrapContentWidth()

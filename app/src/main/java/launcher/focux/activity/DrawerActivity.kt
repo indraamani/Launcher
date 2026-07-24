@@ -46,6 +46,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import launcher.focux.ui.component.BottomSheet
+import launcher.focux.ui.component.popup.RenamePopup
 
 class DrawerActivity : ComponentActivity() {
     private val viewModel : DrawerViewmodel by viewModels()
@@ -79,8 +80,8 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
             }
         }
     }
-    val listt = viewmodel.packages.collectAsStateWithLifecycle(InstalledPackage(allPackages = emptyMap()))
-    val app = viewmodel.selectedApp.collectAsStateWithLifecycle().value
+    val allPackage = viewmodel.packages.collectAsStateWithLifecycle().value.allPackages
+
 
     BottomSheetScaffold(
         modifier = Modifier
@@ -115,7 +116,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
         scaffoldState = bottomSheet,
         sheetContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
         sheetContent = {
-            BottomSheet(bottomSheet,app)
+            BottomSheet(bottomSheet, viewmodel)
         },
         sheetShape = RoundedCornerShape(
             topStart = 16.dp,
@@ -126,8 +127,9 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
             modifier = Modifier
                 .padding(innerPadding),
             viewmodel,
-            apps = listt.value.allPackages,
+            apps = allPackage,
             bottomSheet = bottomSheet
         )
+        RenamePopup(viewmodel)
     }
 }

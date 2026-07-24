@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serializer)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -54,6 +56,8 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.kotlinx.serializer)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.dagger.hilt)
+    ksp(libs.dagger.ksp)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
