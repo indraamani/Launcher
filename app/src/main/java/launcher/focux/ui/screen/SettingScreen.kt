@@ -1,20 +1,30 @@
 package launcher.focux.ui.screen
 
 import android.app.Activity
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -23,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import launcher.focux.R
 import launcher.focux.datastore.userpreference.PreferenceRepo
@@ -70,7 +81,6 @@ fun SettingScreen(
         }
     ) { innerPadding ->
         Column(
-
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -79,7 +89,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 text = "Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -121,7 +131,7 @@ fun SettingScreen(
                 isCheckable = true,
                 check = settings.showStatusBar,
                 onCheckChange = {
-                    coroutineScope.launch {
+                    coroutineScope.launch(Dispatchers.IO) {
                         PreferenceRepo(context).toggleStatusBar(!settings.showStatusBar)
                     }
                     return@SettingButton null
@@ -137,7 +147,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 text = "Swipe App Launch Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -168,8 +178,8 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
-                text = "Swipe App Launch Customisations",
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+                text = "Clock Customisations",
                 fontFamily = FontFamily(
                     Font(settings.font)
                 )
@@ -181,7 +191,7 @@ fun SettingScreen(
                 isCheckable = true,
                 check = settings.showClock,
                 onCheckChange = {
-                    coroutineScope.launch {
+                    coroutineScope.launch(Dispatchers.IO) {
                         PreferenceRepo(context).toggleClock(!settings.showClock)
                     }
                     return@SettingButton null
@@ -194,7 +204,7 @@ fun SettingScreen(
                 isCheckable = true,
                 check = settings.clockFormat,
                 onCheckChange = {
-                    coroutineScope.launch {
+                    coroutineScope.launch(Dispatchers.IO) {
                         PreferenceRepo(context).changeClockFormat(!settings.clockFormat)
                     }
                     return@SettingButton null
@@ -203,7 +213,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 text = "Hidden Apps",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -220,7 +230,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 text = "Renamed Apps",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -237,7 +247,7 @@ fun SettingScreen(
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 text = "Pinned Apps Customization",
                 fontFamily = FontFamily(
                     Font(settings.font)
@@ -251,6 +261,26 @@ fun SettingScreen(
 
                 }
             )
+
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_HOME_SETTINGS)
+                        context.startActivity(intent)
+
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.padding(vertical = 20.dp)
+                ) {
+                    Text(
+                        text = "Set as Default Launcher"
+                    )
+                }
+            }
         }
     }
 }

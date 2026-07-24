@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import launcher.focux.datastore.app.ApplicationRepo
 import launcher.focux.utils.AppModel
@@ -54,14 +55,14 @@ fun RenamePopup(viewmodel: DrawerViewmodel) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(12.dp),
+                    .height(200.dp),
+//                    .padding(12.dp),
                 colors = CardDefaults.cardColors(),
-                border = BorderStroke(
-                    1.dp,
-                    Color.LightGray
-                ),
-                elevation = CardDefaults.elevatedCardElevation(10.dp)
+//                border = BorderStroke(
+//                    1.dp,
+//                    Color.LightGray
+//                ),
+//                elevation = CardDefaults.elevatedCardElevation(10.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -104,7 +105,7 @@ fun RenamePopup(viewmodel: DrawerViewmodel) {
                         }
                         Button(
                             onClick = {
-                                coroutineScope.launch {
+                                coroutineScope.launch(Dispatchers.IO) {
                                     val pkg = Packages(context).fetchAllPackages().toMutableList()
                                     pkg.apply {
                                         removeIf {

@@ -18,14 +18,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import launcher.focux.utils.AppModel
 import launcher.focux.datastore.pinnedapp.PinnedApp
@@ -38,13 +43,13 @@ import java.util.Locale
 fun NestedLazyColumn(
     modifier: Modifier,
     viewmodel: DrawerViewmodel,
+    font: Int,
     apps: Map<String, List<AppModel>>,
     bottomSheet: BottomSheetScaffoldState
 ) {
     // remove
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val font = viewmodel.setting.collectAsState().value.font
 
     LazyColumn(
         contentPadding = PaddingValues(bottom = 12.dp),

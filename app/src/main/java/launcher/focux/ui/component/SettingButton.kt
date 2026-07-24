@@ -46,6 +46,8 @@ fun SettingButton(
             .height(100.dp)
             .padding(horizontal = 16.dp, vertical = 11.dp)
             .combinedClickable(
+                indication = null,
+                interactionSource = null,
                 onClick= { onClick() }
             ),
         shape = RoundedCornerShape(26.dp),

@@ -80,6 +80,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
             }
         }
     }
+    val font = viewmodel.setting.collectAsStateWithLifecycle().value.font
     val allPackage = viewmodel.packages.collectAsStateWithLifecycle().value.allPackages
 
 
@@ -127,6 +128,7 @@ fun DrawerScreen(ctx: Context, viewmodel: DrawerViewmodel) {
             modifier = Modifier
                 .padding(innerPadding),
             viewmodel,
+            font = font,
             apps = allPackage,
             bottomSheet = bottomSheet
         )

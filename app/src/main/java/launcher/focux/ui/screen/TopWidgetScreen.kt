@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import launcher.focux.R
@@ -75,6 +76,7 @@ fun Container(
         content()
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopWidgetScreen(
@@ -123,7 +125,7 @@ fun TopWidgetScreen(
             ) {
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.BOXED_CLOCK)
                         }
                     }) {
@@ -133,7 +135,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.CLOCK)
                         }
                     }) {
@@ -143,7 +145,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DAY)
                         }
                     }) {
@@ -153,7 +155,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DATE)
                         }
                     }) {
@@ -163,7 +165,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DAYCLOCK)
                         }
                     }) {
@@ -173,7 +175,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.DATECLOCK)
                         }
                     }) {
@@ -183,7 +185,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.HOURGRID)
                         }
                     }) {
@@ -193,7 +195,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.MONTHGRID)
                         }
                     }) {
@@ -203,7 +205,7 @@ fun TopWidgetScreen(
 
                 item {
                     Container(onclick = {
-                        coroutineScope.launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             PreferenceRepo(ctx).changeTopWidget(TopWidget.YEARGRID)
                         }
                     }) {

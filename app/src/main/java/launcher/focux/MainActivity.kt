@@ -175,6 +175,11 @@ class MainActivity : ComponentActivity() {
             return
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        launcherApps.unregisterCallback(launcherCallback)
+    }
 }
 
 @Composable
